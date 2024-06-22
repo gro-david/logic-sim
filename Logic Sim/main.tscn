@@ -1,6 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://co51pxfepwro4"]
+[gd_scene load_steps=5 format=3 uid="uid://co51pxfepwro4"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_sa8wf"]
+[ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/input_terminal.tscn" id="2_3bj8a"]
+[ext_resource type="PackedScene" uid="uid://b50xqy201cqmw" path="res://scenes/terminal.tscn" id="3_usivj"]
+[ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="4_c8bpr"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_sa8wf")
+
+[node name="terminal" parent="." instance=ExtResource("2_3bj8a")]
+
+[node name="terminal2" parent="." instance=ExtResource("3_usivj")]
+offset_left = 752.0
+offset_top = 424.0
+offset_right = 752.0
+offset_bottom = 424.0
+
+[node name="wire" parent="." node_paths=PackedStringArray("input_terminal", "output_terminal") instance=ExtResource("4_c8bpr")]
+input_terminal = NodePath("../terminal")
+output_terminal = NodePath("../terminal2")

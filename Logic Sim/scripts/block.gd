@@ -1,4 +1,8 @@
 extends Node2D
+class_name Block
+
+@export var incoming_count: int
+@export var outgoing_count: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
