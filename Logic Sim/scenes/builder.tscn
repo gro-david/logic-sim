@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bosku8dxmpwwr"]
+
+[ext_resource type="Script" path="res://scripts/builder.gd" id="1_ah7ta"]
+[ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="2_h4gki"]
+[ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="3_ryuqs"]
+
+[node name="builder" type="Node2D"]
+script = ExtResource("1_ah7ta")
+input_terminal_scene = ExtResource("2_h4gki")
+output_terminal_scene = ExtResource("2_h4gki")
+input_terminal_count = 7
+output_terminal_count = 6
+input_terminal_spacing = 4
+output_terminal_spacing = 4
+
+[node name="wire" parent="." instance=ExtResource("3_ryuqs")]

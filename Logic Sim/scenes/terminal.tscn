@@ -1,26 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://b50xqy201cqmw"]
+[gd_scene load_steps=4 format=3 uid="uid://cllrt0r8uh583"]
 
-[ext_resource type="Script" path="res://scripts/terminal.gd" id="1_ibohs"]
+[ext_resource type="Script" path="res://scripts/terminal.gd" id="1_b6myk"]
 [ext_resource type="Texture2D" uid="uid://vba4qtk336rf" path="res://artwork/terminal.png" id="2_ymhbw"]
 
-[node name="terminal" type="Control" node_paths=PackedStringArray("sprite")]
-layout_mode = 3
-anchor_left = -0.0625
-anchor_top = -0.0740741
-anchor_right = 0.0625
-anchor_bottom = 0.0740741
-grow_vertical = 2
-pivot_offset = Vector2(72, 48)
-script = ExtResource("1_ibohs")
-on_color = Color(0, 0.878431, 0.0627451, 1)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6mqpm"]
+radius = 44.0
+height = 142.0
+
+[node name="terminal" type="Node2D" node_paths=PackedStringArray("sprite", "connection_node")]
+script = ExtResource("1_b6myk")
+on_color = Color(0.0627451, 0.870588, 0.0627451, 1)
 off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 sprite = NodePath("sprite")
+connection_node = NodePath("connection")
 metadata/_edit_use_anchors_ = true
 
 [node name="sprite" type="Sprite2D" parent="."]
 self_modulate = Color(0.0627451, 0.0627451, 0.0627451, 1)
-position = Vector2(72, 48)
 texture = ExtResource("2_ymhbw")
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_6mqpm")
+
 [node name="connection" type="Node2D" parent="."]
-position = Vector2(96, 48)
+position = Vector2(28, 0)
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
