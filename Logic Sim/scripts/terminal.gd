@@ -11,6 +11,9 @@ signal state_changed
 @export var sprite: Sprite2D
 @export var connection_node: Node2D
 
+@export_category('Config')
+@export var allow_input: bool = false
+
 var state: Global.State:
 	set(value):
 		state = value
@@ -30,9 +33,9 @@ func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int
 	if event is InputEventMouseButton:
 		event = event as InputEventMouseButton
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			print('press')
+			# if we are editing the wires we will not change the state but save the current terminal to be able to reference it
 			if Global.edit_wires:
 				Global.terminal = self
 			else:
+				if not allow_input: return
 				state = Global.toggle_state(state)
-				print(state)
