@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3j50uk6w08t0"]
+
+[ext_resource type="PackedScene" uid="uid://dwfltxi4a3i4k" path="res://scenes/block.tscn" id="1_xrffk"]
+[ext_resource type="Script" path="res://scripts/default_blocks/or_block.gd" id="2_8gphf"]
+
+[node name="block" instance=ExtResource("1_xrffk")]
+script = ExtResource("2_8gphf")
+incoming_count = 2
+outgoing_count = 1
+label = "or"

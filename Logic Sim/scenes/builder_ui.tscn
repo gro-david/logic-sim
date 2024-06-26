@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://da8mb1ryuusws"]
+
+[ext_resource type="Script" path="res://scripts/builder_ui.gd" id="1_oe850"]
+[ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="2_a05ga"]
+[ext_resource type="PackedScene" uid="uid://b8po5edsaqlg7" path="res://scenes/default_blocks/and_block.tscn" id="3_0dxhx"]
+[ext_resource type="PackedScene" uid="uid://d3j50uk6w08t0" path="res://scenes/default_blocks/or_block.tscn" id="4_esh3f"]
+[ext_resource type="PackedScene" uid="uid://c7226krk4a43h" path="res://scenes/default_blocks/not_block.tscn" id="5_tv8l1"]
+
+[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("wire_btn", "and_btn", "or_btn", "not_btn", "save_btn")]
+script = ExtResource("1_oe850")
+wire_scene = ExtResource("2_a05ga")
+and_scene = ExtResource("3_0dxhx")
+or_scene = ExtResource("4_esh3f")
+not_scene = ExtResource("5_tv8l1")
+wire_btn = NodePath("HBoxContainer/wire_btn")
+and_btn = NodePath("HBoxContainer/and_btn")
+or_btn = NodePath("HBoxContainer/or_btn")
+not_btn = NodePath("HBoxContainer/not_btn")
+save_btn = NodePath("HBoxContainer2/save_btn")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="wire_btn" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "WIRE"
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="and_btn" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "AND"
+
+[node name="or_btn" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "OR"
+
+[node name="not_btn" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "NOT"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+alignment = 2
+
+[node name="save_btn" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Save"

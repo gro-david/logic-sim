@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://co51pxfepwro4"]
+[gd_scene load_steps=3 format=3 uid="uid://co51pxfepwro4"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_sa8wf"]
+[ext_resource type="PackedScene" uid="uid://c7226krk4a43h" path="res://scenes/default_blocks/not_block.tscn" id="2_wekam"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_sa8wf")
+
+[node name="block" parent="." instance=ExtResource("2_wekam")]
+position = Vector2(840, 456)
+offset = Vector2(0, 0)

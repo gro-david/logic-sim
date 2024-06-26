@@ -1,0 +1,140 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/default_blocks/and_block.tscn" id="1_v1tsr"]
+[ext_resource type="Script" path="res://scripts/default_blocks/and_block.gd" id="2_p6opx"]
+[ext_resource type="PackedScene" path="res://scenes/terminal.tscn" id="3_vb2nj"]
+[ext_resource type="PackedScene" path="res://scenes/wire.tscn" id="4_715mn"]
+[ext_resource type="Script" path="res://scripts/wire.gd" id="5_vjc1q"]
+[ext_resource type="PackedScene" path="res://scenes/default_blocks/or_block.tscn" id="6_i7nvn"]
+[ext_resource type="Script" path="res://scripts/default_blocks/or_block.gd" id="7_134qk"]
+
+[node name="blocks" type="Node2D"]
+
+[node name="block" type="Node2D" parent="." node_paths=PackedStringArray("incoming", "outgoing", "label_node") instance=ExtResource("1_v1tsr")]
+position = Vector2(726, 565)
+script = ExtResource("2_p6opx")
+incoming_count = 2
+outgoing_count = 1
+incoming = [NodePath("terminal"), NodePath("@Node2D@6")]
+outgoing = [NodePath("@Node2D@7")]
+color = Color(0.497474, 0.497474, 0.497474, 1)
+label = "and"
+offset = Vector2(8, 0)
+build_mode = false
+label_node = NodePath("label")
+terminal_scene = ExtResource("3_vb2nj")
+metadata/type = "block"
+
+[node name="wire" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../../@Node2D@4")
+output_terminal = NodePath("../block/@Node2D@6")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 1
+start_placed = true
+end_placed = true
+metadata/type = "wire"
+
+[node name="@Node2D@8" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../block/@Node2D@7")
+output_terminal = NodePath("../../@Node2D@5")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 0
+start_placed = true
+end_placed = true
+metadata/type = "wire"
+
+[node name="@Node2D@9" type="Node2D" parent="." node_paths=PackedStringArray("incoming", "outgoing", "label_node") instance=ExtResource("6_i7nvn")]
+position = Vector2(217, 701)
+script = ExtResource("7_134qk")
+incoming_count = 2
+outgoing_count = 1
+incoming = [NodePath("terminal"), NodePath("@Node2D@10")]
+outgoing = [NodePath("@Node2D@11")]
+color = Color(0.497474, 0.497474, 0.497474, 1)
+label = "or"
+offset = Vector2(8, 0)
+build_mode = false
+label_node = NodePath("label")
+terminal_scene = ExtResource("3_vb2nj")
+metadata/type = "block"
+
+[node name="@Node2D@12" type="Node2D" parent="." node_paths=PackedStringArray("incoming", "outgoing", "label_node") instance=ExtResource("6_i7nvn")]
+position = Vector2(333, 667)
+script = ExtResource("7_134qk")
+incoming_count = 2
+outgoing_count = 1
+incoming = [NodePath("terminal"), NodePath("@Node2D@13")]
+outgoing = [NodePath("@Node2D@14")]
+color = Color(0.497474, 0.497474, 0.497474, 1)
+label = "or"
+offset = Vector2(8, 0)
+build_mode = false
+label_node = NodePath("label")
+terminal_scene = ExtResource("3_vb2nj")
+metadata/type = "block"
+
+[node name="@Node2D@15" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../@Node2D@12/@Node2D@14")
+output_terminal = NodePath("../block/terminal")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 0
+start_placed = true
+end_placed = true
+metadata/type = "wire"
+
+[node name="@Node2D@16" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../../@Node2D@3")
+output_terminal = NodePath("../@Node2D@12/@Node2D@13")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 0
+start_placed = true
+end_placed = true
+metadata/type = "wire"
+
+[node name="@Node2D@17" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../@Node2D@9/@Node2D@11")
+output_terminal = NodePath("../@Node2D@12/terminal")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 0
+start_placed = true
+end_placed = true
+metadata/type = "wire"
+
+[node name="@Node2D@18" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../../terminal")
+output_terminal = NodePath("../@Node2D@9/@Node2D@10")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 0
+start_placed = true
+end_placed = true
+metadata/type = "wire"
+
+[node name="@Node2D@19" type="Node2D" parent="." node_paths=PackedStringArray("line", "input_terminal", "output_terminal") instance=ExtResource("4_715mn")]
+script = ExtResource("5_vjc1q")
+line = NodePath("Line2D")
+input_terminal = NodePath("../../@Node2D@2")
+output_terminal = NodePath("../@Node2D@9/terminal")
+on_color = Color(0, 0.878431, 0.0627451, 1)
+off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+state = 0
+start_placed = true
+end_placed = true
+metadata/type = "wire"

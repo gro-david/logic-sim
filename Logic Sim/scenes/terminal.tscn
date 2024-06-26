@@ -8,6 +8,8 @@ radius = 44.0
 height = 142.0
 
 [node name="terminal" type="Node2D" node_paths=PackedStringArray("sprite", "connection_node")]
+show_behind_parent = true
+scale = Vector2(0.25, 0.25)
 script = ExtResource("1_b6myk")
 on_color = Color(0.0627451, 0.870588, 0.0627451, 1)
 off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)

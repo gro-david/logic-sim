@@ -2,26 +2,19 @@
 
 [ext_resource type="Script" path="res://scripts/builder.gd" id="1_ah7ta"]
 [ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="2_h4gki"]
-[ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="3_ryuqs"]
+[ext_resource type="PackedScene" uid="uid://da8mb1ryuusws" path="res://scenes/builder_ui.tscn" id="4_op87a"]
 
-[node name="builder" type="Node2D"]
+[node name="builder" type="Node2D" node_paths=PackedStringArray("blocks")]
 script = ExtResource("1_ah7ta")
 input_terminal_scene = ExtResource("2_h4gki")
 output_terminal_scene = ExtResource("2_h4gki")
-input_terminal_count = 7
-output_terminal_count = 6
+input_terminal_count = 4
 input_terminal_spacing = 4
 output_terminal_spacing = 4
+input_terminal_x_position = 6.0
+output_terminal_x_position = 1914.0
+blocks = NodePath("blocks")
 
-[node name="wire" parent="." instance=ExtResource("3_ryuqs")]
+[node name="ui" parent="." instance=ExtResource("4_op87a")]
 
-[node name="ui" type="CanvasLayer" parent="."]
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ui"]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_vertical = 4
+[node name="blocks" type="Node2D" parent="."]
