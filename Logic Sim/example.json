@@ -2,7 +2,8 @@
 	"info": {
 		"block_name": "",
 		"input_terminal_count": 0,
-		"output_terminal_count": 0
+		"output_terminal_count": 0,
+		"color": "#ffffff"
 	},
 	"blocks": [
 		{
@@ -15,7 +16,8 @@
 	"wires": [
 		{
 			"input_terminal": "block_0/terminal_1",
-			"output_terminal": "terminal_2"
+			"output_terminal": "/terminal_2"
 		}
-	]
+	],
+	"permutations": []
 }

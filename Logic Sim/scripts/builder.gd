@@ -20,11 +20,15 @@ var output_terminal_instance: Terminal
 var input_terminal_height: float
 var output_terminal_height: float
 
+var input_terminals: Array[Terminal]
+var output_terminals: Array[Terminal]
+
 var block_count: int = 0
 var wire_count: int = 0
 
 # the name of the block we are building
-var built_block_name: String = 'test'
+var built_block_name: String = 'Block Name'
+var built_block_color: Color = Color((randf() + 1) / 2, (randf() + 1) / 2, (randf() + 1) / 2)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,17 +41,21 @@ func _ready():
 
 	var input_terminal_count_even := input_terminal_count % 2 == 0
 	var output_terminal_count_even := output_terminal_count % 2 == 0
-	if input_terminal_count_even: instantiate_terminal_even_count(input_terminal_scene, input_terminal_count, input_terminal_x_position, input_terminal_height, false, true)
-	else: instantiate_terminal_odd_count(input_terminal_scene, input_terminal_count, input_terminal_x_position, input_terminal_height, false, true)
-	if output_terminal_count_even: instantiate_terminal_even_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
-	else: instantiate_terminal_odd_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
+
+	if input_terminal_count_even: input_terminals = instantiate_terminal_even_count(input_terminal_scene, input_terminal_count, input_terminal_x_position, input_terminal_height, false, true)
+	else: input_terminals = instantiate_terminal_odd_count(input_terminal_scene, input_terminal_count, input_terminal_x_position, input_terminal_height, false, true)
+	if output_terminal_count_even: output_terminals = instantiate_terminal_even_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
+	else: output_terminals = instantiate_terminal_odd_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
+
+	simulate()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
 
-func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_position: float, height: float, flip: bool, is_input: bool):
+func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_position: float, height: float, flip: bool, is_input: bool) -> Array[Terminal]:
 	var half_point = int(count / 2.0)
+	var terminals: Array[Terminal] = []
 	for i in range(count):
 		# we either move the terminal down or up depending on if we are above or below the middle
 		if i < half_point:
@@ -58,6 +66,7 @@ func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_positi
 			terminal_instance.allow_user_input = is_input
 			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
 			add_child(terminal_instance)
+			terminals.append(terminal_instance)
 		else:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position - ((i % half_point) * height + 0.5 * height))
@@ -66,9 +75,12 @@ func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_positi
 			terminal_instance.allow_user_input = is_input
 			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
 			add_child(terminal_instance)
+			terminals.append(terminal_instance)
+	return terminals
 
-func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_position: float, height: float, flip: bool, is_input: bool):
+func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_position: float, height: float, flip: bool, is_input: bool) -> Array[Terminal]:
 	var half_point = int((count - 1) / 2.0)
+	var terminals: Array[Terminal] = []
 	for i in range(count):
 		# we either move the terminal down or up or not depending on if we are below or above the middle
 		if i < half_point:
@@ -79,6 +91,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 			terminal_instance.allow_user_input = is_input
 			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
 			add_child(terminal_instance)
+			terminals.append(terminal_instance)
 		elif i == half_point:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position)
@@ -87,6 +100,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 			terminal_instance.allow_user_input = is_input
 			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
 			add_child(terminal_instance)
+			terminals.append(terminal_instance)
 		else:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position - ((i % half_point) + 1) * height)
@@ -95,11 +109,51 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 			terminal_instance.allow_user_input = is_input
 			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
 			add_child(terminal_instance)
+			terminals.append(terminal_instance)
+	return terminals
+
+func simulate() -> Dictionary:
+	var result: Dictionary = {}
+
+	for i in range(pow(2, input_terminal_count)):
+		var states = String.num_int64(i, 2).pad_zeros(4).split('')
+		for j in range(len(input_terminals)):
+			var terminal = input_terminals[j]
+			terminal.state = int(states[j])
+		result = Helpers.merge_dicts_recursively(result, get_input_output())
+
+	for terminal in input_terminals:
+		terminal.state = Global.State.OFF
+
+	return result
+
+
+func get_input_output() -> Dictionary:
+	var dict: Dictionary = {}
+	var last_dict: Dictionary = dict
+	var output_array: Array = []
+
+	for terminal in output_terminals:
+		output_array.append(terminal.state)
+
+	for terminal in input_terminals:
+		if terminal == input_terminals[-1]:
+			last_dict[terminal.state] = output_array
+			break
+		last_dict[terminal.state] = {}
+		last_dict = last_dict[terminal.state]
+
+	return dict
 
 func save():
 	var data: Dictionary = {}
 
-	data['info'] = {'block_name': built_block_name, 'input_terminal_count': input_terminal_count, 'output_terminal_count': output_terminal_count}
+	data['info'] = {
+		'block_name': built_block_name,
+		'input_terminal_count': input_terminal_count,
+		'output_terminal_count': output_terminal_count,
+		'color': built_block_color.to_html(false)
+	}
 	data['blocks'] = []
 	data['wires'] = []
 
@@ -113,4 +167,11 @@ func save():
 		var wire_data: Dictionary = {'input_terminal':  input_terminal_path.replace('block_builder', ''), 'output_terminal': output_terminal_path.replace('block_builder', '')}
 		data['wires'].append(wire_data)
 
-	print(data)
+	data['permutations'] = simulate()
+
+	if not DirAccess.dir_exists_absolute(Global.block_path): DirAccess.make_dir_absolute(Global.block_path)
+
+	var json: String = JSON.stringify(data)
+	var save_file = FileAccess.open('user://blocks/' + data['info']['block_name'] + '.json', FileAccess.WRITE)
+
+	save_file.store_string(json)

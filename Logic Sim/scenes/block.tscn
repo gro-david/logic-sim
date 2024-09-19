@@ -1,12 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://dwfltxi4a3i4k"]
 
-[ext_resource type="Script" path="res://scripts/block.gd" id="1_s4xhi"]
+[ext_resource type="Script" path="res://scripts/custom_blocks.gd" id="1_lua1o"]
 [ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="2_thbi0"]
 
 [node name="block" type="Node2D" node_paths=PackedStringArray("label_node")]
-script = ExtResource("1_s4xhi")
-color = Color(0.497474, 0.497474, 0.497474, 1)
-offset = Vector2(8, 0)
+script = ExtResource("1_lua1o")
 label_node = NodePath("label")
 terminal_scene = ExtResource("2_thbi0")
 

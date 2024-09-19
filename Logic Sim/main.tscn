@@ -8,4 +8,4 @@ script = ExtResource("1_sa8wf")
 
 [node name="block" parent="." instance=ExtResource("2_wekam")]
 position = Vector2(840, 456)
-offset = Vector2(0, 0)
+color = Color(0.497474, 0.497474, 0.497474, 1)

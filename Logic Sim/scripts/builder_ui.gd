@@ -7,14 +7,20 @@ extends CanvasLayer
 @export var not_scene: PackedScene
 
 @export_category('Nodes')
-@export var wire_btn: Button
+@export var name_edit: LineEdit
+@export var color_picker: ColorPickerButton
 @export_category('Block Buttons')
 @export var and_btn: Button
 @export var or_btn: Button
 @export var not_btn: Button
 
 @export_category('Other Buttons')
+@export var wire_btn: Button
 @export var save_btn: Button
+
+@export_category('Scenes')
+@export var custom_block_button: PackedScene
+@export var custom_block: PackedScene
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,19 +30,48 @@ func _ready():
 	not_btn.pressed.connect(instantiate_block.bind(not_scene))
 	save_btn.pressed.connect(get_parent().save.bind())
 
+	name_edit.text = get_parent().built_block_name
+	color_picker.color = get_parent().built_block_color
+
+	for file in DirAccess.get_files_at(Global.block_path):
+		var json = JSON.parse_string(FileAccess.open(Global.block_path + '/' + file, FileAccess.READ).get_as_text())
+		var button: CustomBlockButton = custom_block_button.instantiate()
+		button.name = json['info']['block_name']
+		button.text = json['info']['block_name'].to_upper()
+		button.corresponding_block_data_path = Global.block_path + '/' + file
+		button.edit_block.connect(edit_custom_block.bind())
+		button.instantiate_block.connect(instantiate_custom_block.bind())
+		$inventory.add_child(button)
+
 
 func instantiate_block(scene: PackedScene):
 	var instance = scene.instantiate()
 	instance.name = str(get_parent().block_count)
+	instance.build_mode = true
 	get_parent().block_count += 1
 	get_parent().blocks.add_child(instance)
-	if not instance.get_meta('type') == 'block': return
-	instance.build_mode = true
 
 func instantiate_wire():
 	var instance = wire_scene.instantiate()
 	instance.name = str(get_parent().wire_count)
 	get_parent().wire_count += 1
 	get_parent().wires.add_child(instance)
-	if not instance.get_meta('type') == 'block': return
+
+
+func _on_name_text_changed(new_text:String) -> void:
+	get_parent().built_block_name = new_text
+
+func _on_color_picker_color_changed(color:Color) -> void:
+	get_parent().built_block_color = color
+
+func edit_custom_block(block_path: String):
+	pass
+
+func instantiate_custom_block(block_path: String):
+	var block_data = JSON.parse_string(FileAccess.open(block_path, FileAccess.READ).get_as_text())
+	var instance: CustomBlock = custom_block.instantiate()
+	instance.name = str(get_parent().block_count)
 	instance.build_mode = true
+	instance.block_data = block_data
+	get_parent().block_count += 1
+	get_parent().blocks.add_child(instance)

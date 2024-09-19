@@ -3,6 +3,8 @@ extends Node
 signal terminal_changed
 signal edit_wires_changed
 
+var block_path: String = 'user://blocks'
+
 # state of the terminals lamps and wires
 enum State {OFF, ON}
 
