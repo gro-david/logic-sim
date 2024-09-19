@@ -8,3 +8,4 @@ script = ExtResource("2_tewu6")
 incoming_count = 1
 outgoing_count = 1
 label = "not"
+block_name = "builtin_not"

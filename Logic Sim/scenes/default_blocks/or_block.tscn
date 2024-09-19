@@ -8,3 +8,4 @@ script = ExtResource("2_8gphf")
 incoming_count = 2
 outgoing_count = 1
 label = "or"
+block_name = "builtin_or"

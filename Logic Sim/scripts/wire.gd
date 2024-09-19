@@ -22,7 +22,7 @@ extends Node2D
 		if start_placed:
 			show()
 			calculate_line_points()
-			
+
 @export var end_placed: bool = false:
 	set(value):
 		end_placed = value
@@ -118,6 +118,7 @@ func calculate_line_points():
 		line.points[1] = Vector2(center_x, output_terminal.connection_node.global_position.y)
 		line.points[2] = Vector2(center_x, get_global_mouse_position().y)
 		line.points[3] = get_global_mouse_position()
+
 
 func update_states():
 	state = input_terminal.state

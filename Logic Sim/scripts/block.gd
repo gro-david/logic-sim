@@ -12,6 +12,7 @@ class_name Block
 @export var label: String
 @export var offset: Vector2
 @export var build_mode: bool
+@export var block_name: String
 
 @export_category('Nodes')
 @export var label_node: Label
@@ -44,7 +45,7 @@ func _ready():
 	if block_height < incoming_count * terminal_height:
 		label_node.size.y = incoming_count * terminal_height
 		block_height = incoming_count * terminal_height
-	
+
 	if block_height < outgoing_count * terminal_height:
 		label_node.size.y = outgoing_count * terminal_height
 		block_height = outgoing_count * terminal_height
@@ -57,7 +58,7 @@ func _ready():
 		outgoing = instantiate_terminal_even_count(terminal_scene, outgoing_count, block_width + offset.x, block_height / 2, terminal_height, false, true)
 	else:
 		outgoing = instantiate_terminal_odd_count(terminal_scene, outgoing_count, block_width + offset.x, block_height / 2, terminal_height, false, true)
-	
+
 	for terminal in incoming:
 		terminal.state_changed.connect(update_states.bind())
 
@@ -81,6 +82,7 @@ func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_positi
 			terminal_instance.allow_user_input = false
 			terminals.append(terminal_instance)
 			terminal_instance.parent_block = self
+			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "label" else '0'
 			add_child(terminal_instance)
 		else:
 			var terminal_instance: Terminal = terminal.instantiate()
@@ -90,6 +92,7 @@ func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_positi
 			terminal_instance.allow_user_input = false
 			terminals.append(terminal_instance)
 			terminal_instance.parent_block = self
+			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "label" else '0'
 			add_child(terminal_instance)
 	return terminals
 
@@ -106,6 +109,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 			terminal_instance.allow_user_input = false
 			terminals.append(terminal_instance)
 			terminal_instance.parent_block = self
+			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "label" else '0'
 			add_child(terminal_instance)
 		elif i == half_point:
 			var terminal_instance: Terminal = terminal.instantiate()
@@ -114,6 +118,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 			terminal_instance.input_terminal = is_input
 			terminal_instance.allow_user_input = false
 			terminal_instance.parent_block = self
+			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "label" else '0'
 			terminals.append(terminal_instance)
 			add_child(terminal_instance)
 		else:
@@ -124,6 +129,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 			terminal_instance.allow_user_input = false
 			terminals.append(terminal_instance)
 			terminal_instance.parent_block = self
+			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "label" else '0'
 			add_child(terminal_instance)
 	return terminals
 

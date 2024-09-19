@@ -8,3 +8,4 @@ script = ExtResource("2_20dip")
 incoming_count = 2
 outgoing_count = 1
 label = "and"
+block_name = "builtin_and"

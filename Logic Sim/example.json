@@ -1,0 +1,21 @@
+{
+	"info": {
+		"block_name": "",
+		"input_terminal_count": 0,
+		"output_terminal_count": 0
+	},
+	"blocks": [
+		{
+			"index": 0,
+			"name_id": "builtin_not",
+			"x_pos": 0,
+			"y_pos": 0
+		}
+	],
+	"wires": [
+		{
+			"input_terminal": "block_0/terminal_1",
+			"output_terminal": "terminal_2"
+		}
+	]
+}

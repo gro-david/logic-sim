@@ -7,8 +7,8 @@ extends CanvasLayer
 @export var not_scene: PackedScene
 
 @export_category('Nodes')
-@export_category('Block Buttons')
 @export var wire_btn: Button
+@export_category('Block Buttons')
 @export var and_btn: Button
 @export var or_btn: Button
 @export var not_btn: Button
@@ -18,18 +18,25 @@ extends CanvasLayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	wire_btn.pressed.connect(instantiate_scene.bind(wire_scene))
-	and_btn.pressed.connect(instantiate_scene.bind(and_scene))
-	or_btn.pressed.connect(instantiate_scene.bind(or_scene))
-	not_btn.pressed.connect(instantiate_scene.bind(not_scene))
+	wire_btn.pressed.connect(instantiate_wire.bind())
+	and_btn.pressed.connect(instantiate_block.bind(and_scene))
+	or_btn.pressed.connect(instantiate_block.bind(or_scene))
+	not_btn.pressed.connect(instantiate_block.bind(not_scene))
 	save_btn.pressed.connect(get_parent().save.bind())
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
 
-func instantiate_scene(scene: PackedScene):
+func instantiate_block(scene: PackedScene):
 	var instance = scene.instantiate()
+	instance.name = str(get_parent().block_count)
+	get_parent().block_count += 1
 	get_parent().blocks.add_child(instance)
+	if not instance.get_meta('type') == 'block': return
+	instance.build_mode = true
+
+func instantiate_wire():
+	var instance = wire_scene.instantiate()
+	instance.name = str(get_parent().wire_count)
+	get_parent().wire_count += 1
+	get_parent().wires.add_child(instance)
 	if not instance.get_meta('type') == 'block': return
 	instance.build_mode = true

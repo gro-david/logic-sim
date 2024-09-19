@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="2_h4gki"]
 [ext_resource type="PackedScene" uid="uid://da8mb1ryuusws" path="res://scenes/builder_ui.tscn" id="4_op87a"]
 
-[node name="builder" type="Node2D" node_paths=PackedStringArray("blocks")]
+[node name="builder" type="Node2D" node_paths=PackedStringArray("blocks", "wires")]
 script = ExtResource("1_ah7ta")
 input_terminal_scene = ExtResource("2_h4gki")
 output_terminal_scene = ExtResource("2_h4gki")
@@ -14,7 +14,10 @@ output_terminal_spacing = 4
 input_terminal_x_position = 6.0
 output_terminal_x_position = 1914.0
 blocks = NodePath("blocks")
+wires = NodePath("wires")
 
 [node name="ui" parent="." instance=ExtResource("4_op87a")]
 
 [node name="blocks" type="Node2D" parent="."]
+
+[node name="wires" type="Node2D" parent="."]
