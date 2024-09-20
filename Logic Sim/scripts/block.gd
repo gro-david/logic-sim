@@ -26,6 +26,7 @@ var block_width: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print('ready_called on ' + str(name))
 	set_meta('type', 'block')
 
 	var terminal_instance: Terminal = terminal_scene.instantiate()
@@ -41,6 +42,8 @@ func _ready():
 
 	block_height = label_node.get_minimum_size().y
 	block_width = label_node.get_minimum_size().x
+
+	label_node.size = label_node.get_minimum_size()
 
 	if block_height < incoming_count * terminal_height:
 		label_node.size.y = incoming_count * terminal_height
@@ -139,8 +142,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 func _process(_delta):
 	if not build_mode: return
 	if Input.is_action_pressed('escape'): queue_free()
-	#global_position = round(get_global_mouse_position() / Global.building_grid_size) * Global.building_grid_size - $label.get_minimum_size() / 2
-	global_position = round(get_global_mouse_position() / Global.building_grid_size) * Global.building_grid_size - Vector2(block_width, block_height) / 2
+	global_position = Helpers.get_position_on_building_grid(get_global_mouse_position()) - Vector2(block_width, block_height) / 2
 	if Input.is_action_just_pressed('mouse_click'):
 		build_mode = false
 		show()

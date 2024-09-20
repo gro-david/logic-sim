@@ -21,7 +21,7 @@ metadata/_edit_use_anchors_ = true
 self_modulate = Color(0.0627451, 0.0627451, 0.0627451, 1)
 texture = ExtResource("2_ymhbw")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["terminal_area"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 rotation = 1.5708

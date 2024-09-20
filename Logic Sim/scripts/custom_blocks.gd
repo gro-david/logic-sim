@@ -12,6 +12,9 @@ func _ready() -> void:
 	color = Color.from_string(block_data['info']['color'], '#ffffff')
 	permutations = Helpers.dict_key_to_int_recursively(block_data['permutations'])
 	build_mode = true
+
+	$Area2D/CollisionShape2D.shape = RectangleShape2D.new()
+
 	super()
 
 func update_states():

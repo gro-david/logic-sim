@@ -27,12 +27,11 @@ func _process(_delta):
 	pass
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
-	if event is InputEventMouseButton:
-		event = event as InputEventMouseButton
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			# if we are editing the wires we will not change the state but save the current terminal to be able to reference it
-			if Global.edit_wires:
-				Global.terminal = self
-			else:
-				if not allow_user_input: return
-				state = Global.toggle_state(state)
+	get_viewport().set_input_as_handled()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		# if we are editing the wires we will not change the state but save the current terminal to be able to reference it
+		if Global.edit_wires:
+			Global.terminal = self
+		else:
+			if not allow_user_input: return
+			state = Global.toggle_state(state)

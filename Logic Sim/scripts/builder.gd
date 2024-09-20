@@ -59,6 +59,7 @@ func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_positi
 		if i < half_point:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position + ((i % half_point) * height + 0.5 * height))
+			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
 			terminal_instance.scale.x *= -1 if flip else 1
 			terminal_instance.input_terminal = is_input
 			terminal_instance.allow_user_input = is_input
@@ -68,6 +69,7 @@ func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_positi
 		else:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position - ((i % half_point) * height + 0.5 * height))
+			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
 			terminal_instance.scale.x *= -1 if flip else 1
 			terminal_instance.input_terminal = is_input
 			terminal_instance.allow_user_input = is_input
@@ -84,6 +86,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 		if i < half_point:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position + ((i % half_point) + 1) * height)
+			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
 			terminal_instance.scale.x *= -1 if flip else 1
 			terminal_instance.input_terminal = is_input
 			terminal_instance.allow_user_input = is_input
@@ -93,6 +96,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 		elif i == half_point:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position)
+			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
 			terminal_instance.scale.x *= -1 if flip else 1
 			terminal_instance.input_terminal = is_input
 			terminal_instance.allow_user_input = is_input
@@ -102,6 +106,7 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 		else:
 			var terminal_instance: Terminal = terminal.instantiate()
 			terminal_instance.global_position = Vector2(x_position, center_y_position - ((i % half_point) + 1) * height)
+			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
 			terminal_instance.scale.x *= -1 if flip else 1
 			terminal_instance.input_terminal = is_input
 			terminal_instance.allow_user_input = is_input

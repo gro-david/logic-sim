@@ -9,8 +9,10 @@ on_color = Color(0, 0.878431, 0.0627451, 1)
 off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
 [node name="Line2D" type="Line2D" parent="."]
-points = PackedVector2Array(0, 0, 16, 0, 16, 16, 32, 16)
-width = 4.0
+points = PackedVector2Array(0, 0, 16, 0, 16, 16)
+width = 5.0
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
+
+[node name="Area2D" type="Area2D" parent="." groups=["wire_area"]]

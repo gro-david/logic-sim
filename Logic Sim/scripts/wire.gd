@@ -30,6 +30,7 @@ extends Node2D
 			show()
 			calculate_line_points()
 
+var additional_points: Array[Vector2] = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_meta('type', 'wire')
@@ -45,6 +46,26 @@ func _process(_delta):
 		calculate_line_points()
 	else:
 		global_position = get_global_mouse_position()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not start_placed and not end_placed or (start_placed and end_placed): return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# actually we are appending the last two elements one more time, but after appending the second from the back the first one from the back becomes the second one
+		line.add_point(line.get_point_position(line.get_point_count() - 3))
+		line.add_point(line.get_point_position(line.get_point_count() - 3))
+		check_for_wire_completed.call_deferred()
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		if line.get_point_count() == 3:
+			queue_free()
+			return
+		line.remove_point(line.get_point_count() - 1)
+		line.remove_point(line.get_point_count() - 1)
+
+func check_for_wire_completed():
+	if not (start_placed and end_placed): return
+	line.remove_point(line.get_point_count() - 1)
+	line.remove_point(line.get_point_count() - 1)
+
 
 func set_terminal():
 	# if the terminal is the same one as one of the other ones we just return.
@@ -85,40 +106,26 @@ func set_output_terminal():
 		Global.edit_wires = false
 
 func calculate_line_points():
-	if end_placed and start_placed:
-		# if the wire would come down directly straight we want to offset it
-		var center_offset := (output_terminal.connection_node.global_position.x - input_terminal.connection_node.global_position.x) / 2
-		if abs(center_offset) < 64:
-			center_offset = 64 if input_terminal.connection_node.global_position.x + 64 < get_viewport().size.x else - 64
-		# automatically position the lines, also keep the connections strictly horizontal and vertical
-		var center_x = input_terminal.connection_node.global_position.x + center_offset
-		line.points[0] = input_terminal.connection_node.global_position
-		line.points[1] = Vector2(center_x, input_terminal.connection_node.global_position.y)
-		line.points[2] = Vector2(center_x, output_terminal.connection_node.global_position.y)
-		line.points[3] = output_terminal.connection_node.global_position
-	elif start_placed:
-		# if the wire would come down directly straight we want to offset it
-		var center_offset := (get_global_mouse_position().x - input_terminal.connection_node.global_position.x) / 2
-		if abs(center_offset) < 64:
-			center_offset = 64 if input_terminal.connection_node.global_position.x + 64 < get_viewport().size.x else - 64
-		# automatically position the lines, also keep the connections strictly horizontal and vertical
-		var center_x := input_terminal.connection_node.global_position.x + center_offset
-		line.points[0] = input_terminal.connection_node.global_position
-		line.points[1] = Vector2(center_x, input_terminal.connection_node.global_position.y)
-		line.points[2] = Vector2(center_x, get_global_mouse_position().y)
-		line.points[3] = get_global_mouse_position()
-	elif end_placed:
-		# if the wire would come down directly straight we want to offset it
-		var center_offset := (get_global_mouse_position().x - output_terminal.connection_node.global_position.x) / 2
-		if abs(center_offset) < 64:
-			center_offset = 64 if output_terminal.connection_node.global_position.x + 64 < get_viewport().size.x else - 64
-		# automatically position the lines, also keep the connections strictly horizontal and vertical
-		var center_x := output_terminal.connection_node.global_position.x + center_offset
-		line.points[0] = output_terminal.connection_node.global_position
-		line.points[1] = Vector2(center_x, output_terminal.connection_node.global_position.y)
-		line.points[2] = Vector2(center_x, get_global_mouse_position().y)
-		line.points[3] = get_global_mouse_position()
+	var rounded_mouse_position: Vector2 = Helpers.get_position_on_building_grid(get_global_mouse_position())
+	if start_placed and not end_placed: calculate_line_points_backend(input_terminal.connection_node.global_position, rounded_mouse_position)
+	elif end_placed and not start_placed: calculate_line_points_backend(output_terminal.connection_node.global_position, rounded_mouse_position)
+	elif start_placed and end_placed: add_collision_shapes()
 
+
+func calculate_line_points_backend(start: Vector2, end: Vector2):
+	line.points[0] = start
+	line.points[-1] = end
+	line.points[-2] = Vector2(line.points[-3].x, line.points[-1].y) if not Settings.wire_curve_direction_toggled else Vector2(line.points[-1].x, line.points[-3].y)
+
+func add_collision_shapes() -> void:
+	for i in line.get_point_count() - 2:
+		var point = line.get_point_position(i)
+		var next_point = line.get_point_position(i + 1)
+		var collision_shape: CollisionShape2D = CollisionShape2D.new()
+		collision_shape.shape = SegmentShape2D.new()
+		collision_shape.shape.a = point
+		collision_shape.shape.b = next_point
+		$Area2D.add_child(collision_shape)
 
 func update_states():
 	state = input_terminal.state

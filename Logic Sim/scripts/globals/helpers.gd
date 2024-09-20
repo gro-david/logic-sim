@@ -14,3 +14,6 @@ func dict_key_to_int_recursively(dict: Dictionary) -> Dictionary:
 		if dict[int_key] is Dictionary: dict_key_to_int_recursively(dict[int_key])
 		dict.erase(key)
 	return dict
+
+func get_position_on_building_grid(position: Vector2) -> Vector2:
+	return round(position / Global.building_grid_size) * Global.building_grid_size

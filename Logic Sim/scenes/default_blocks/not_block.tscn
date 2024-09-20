@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7226krk4a43h"]
+[gd_scene load_steps=4 format=3 uid="uid://c7226krk4a43h"]
 
 [ext_resource type="PackedScene" uid="uid://dwfltxi4a3i4k" path="res://scenes/block.tscn" id="1_c6knl"]
 [ext_resource type="Script" path="res://scripts/default_blocks/not_block.gd" id="2_tewu6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xcmne"]
 
 [node name="block" instance=ExtResource("1_c6knl")]
 script = ExtResource("2_tewu6")
@@ -9,3 +11,6 @@ incoming_count = 1
 outgoing_count = 1
 label = "not"
 block_name = "builtin_not"
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource("RectangleShape2D_xcmne")

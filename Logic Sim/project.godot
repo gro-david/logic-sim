@@ -19,12 +19,19 @@ config/icon="res://icon.svg"
 
 Global="*res://scripts/globals/global.gd"
 Helpers="*res://scripts/globals/helpers.gd"
+Settings="*res://scripts/globals/settings.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
+
+[global_group]
+
+wire_area=""
+terminal_area=""
+block_area=""
 
 [input]
 
