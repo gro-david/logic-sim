@@ -47,8 +47,6 @@ func _ready():
 	if output_terminal_count_even: output_terminals = instantiate_terminal_even_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
 	else: output_terminals = instantiate_terminal_odd_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
 
-	simulate()
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
@@ -116,7 +114,7 @@ func simulate() -> Dictionary:
 	var result: Dictionary = {}
 
 	for i in range(pow(2, input_terminal_count)):
-		var states = String.num_int64(i, 2).pad_zeros(4).split('')
+		var states = String.num_int64(i, 2).pad_zeros(input_terminal_count).split('')
 		for j in range(len(input_terminals)):
 			var terminal = input_terminals[j]
 			terminal.state = int(states[j])

@@ -3,7 +3,7 @@ extends CanvasLayer
 @export_category('Scenes')
 @export var wire_scene: PackedScene
 @export var and_scene: PackedScene
-@export var or_scene: PackedScene
+#@export var or_scene: PackedScene
 @export var not_scene: PackedScene
 
 @export_category('Nodes')
@@ -11,7 +11,7 @@ extends CanvasLayer
 @export var color_picker: ColorPickerButton
 @export_category('Block Buttons')
 @export var and_btn: Button
-@export var or_btn: Button
+#@export var or_btn: Button
 @export var not_btn: Button
 
 @export_category('Other Buttons')
@@ -26,7 +26,7 @@ extends CanvasLayer
 func _ready():
 	wire_btn.pressed.connect(instantiate_wire.bind())
 	and_btn.pressed.connect(instantiate_block.bind(and_scene))
-	or_btn.pressed.connect(instantiate_block.bind(or_scene))
+	#or_btn.pressed.connect(instantiate_block.bind(or_scene))
 	not_btn.pressed.connect(instantiate_block.bind(not_scene))
 	save_btn.pressed.connect(get_parent().save.bind())
 
@@ -40,6 +40,7 @@ func _ready():
 		button.text = json['info']['block_name'].to_upper()
 		button.corresponding_block_data_path = Global.block_path + '/' + file
 		button.edit_block.connect(edit_custom_block.bind())
+		button.delete_block.connect(delete_custom_block.bind())
 		button.instantiate_block.connect(instantiate_custom_block.bind())
 		$inventory.add_child(button)
 
@@ -64,8 +65,21 @@ func _on_name_text_changed(new_text:String) -> void:
 func _on_color_picker_color_changed(color:Color) -> void:
 	get_parent().built_block_color = color
 
-func edit_custom_block(block_path: String):
+func edit_custom_block(block_path: String) -> void:
 	pass
+
+func delete_custom_block(block_path: String) -> void:
+	var confirmation_dialog = ConfirmationDialog.new()
+	confirmation_dialog.confirmed.connect(_on_delete_confirmed.bind(block_path))
+	confirmation_dialog.dialog_text = 'Are you sure you want to delete ' + block_path.split('/')[-1].split('.')[0] + '?'
+	confirmation_dialog.ok_button_text = 'Yes'
+	confirmation_dialog.cancel_button_text = 'No'
+	confirmation_dialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
+	confirmation_dialog.popup()
+	add_child(confirmation_dialog)
+
+func _on_delete_confirmed(block_path: String) -> void:
+	DirAccess.remove_absolute(block_path)
 
 func instantiate_custom_block(block_path: String):
 	var block_data = JSON.parse_string(FileAccess.open(block_path, FileAccess.READ).get_as_text())

@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwfltxi4a3i4k"]
+[gd_scene load_steps=4 format=3 uid="uid://dwfltxi4a3i4k"]
 
 [ext_resource type="Script" path="res://scripts/custom_blocks.gd" id="1_lua1o"]
 [ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="2_thbi0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tad65"]
 
 [node name="block" type="Node2D" node_paths=PackedStringArray("label_node")]
 script = ExtResource("1_lua1o")
@@ -15,3 +17,10 @@ text = "
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_tad65")
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

@@ -3,6 +3,8 @@ extends Node
 signal terminal_changed
 signal edit_wires_changed
 
+var building_grid_size: int = 32
+
 var block_path: String = 'user://blocks'
 
 # state of the terminals lamps and wires

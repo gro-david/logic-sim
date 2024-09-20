@@ -50,6 +50,9 @@ func _ready():
 		label_node.size.y = outgoing_count * terminal_height
 		block_height = outgoing_count * terminal_height
 
+	$Area2D/CollisionShape2D.shape.size = Vector2(block_width, block_height)
+	$Area2D/CollisionShape2D.position += Vector2(block_width, block_height) / 2
+
 	if incoming_count % 2 == 0:
 		incoming = instantiate_terminal_even_count(terminal_scene, incoming_count, -offset.x, block_height / 2, terminal_height, true, false)
 	else:
@@ -135,8 +138,22 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 
 func _process(_delta):
 	if not build_mode: return
-	global_position = get_global_mouse_position()
-
+	if Input.is_action_pressed('escape'): queue_free()
+	#global_position = round(get_global_mouse_position() / Global.building_grid_size) * Global.building_grid_size - $label.get_minimum_size() / 2
+	global_position = round(get_global_mouse_position() / Global.building_grid_size) * Global.building_grid_size - Vector2(block_width, block_height) / 2
 	if Input.is_action_just_pressed('mouse_click'):
 		build_mode = false
 		show()
+
+
+func _on_label_gui_input(event:InputEvent) -> void:
+	print('gui event')
+	print(event)
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		queue_free()
+
+
+
+func _on_area_2d_input_event(viewport:Node, event:InputEvent, shape_idx:int) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		queue_free()

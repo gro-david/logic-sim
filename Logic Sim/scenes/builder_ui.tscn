@@ -1,23 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://da8mb1ryuusws"]
+[gd_scene load_steps=7 format=3 uid="uid://da8mb1ryuusws"]
 
 [ext_resource type="Script" path="res://scripts/builder_ui.gd" id="1_oe850"]
 [ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="2_a05ga"]
 [ext_resource type="PackedScene" uid="uid://b8po5edsaqlg7" path="res://scenes/default_blocks/and_block.tscn" id="3_0dxhx"]
-[ext_resource type="PackedScene" uid="uid://d3j50uk6w08t0" path="res://scenes/default_blocks/or_block.tscn" id="4_esh3f"]
 [ext_resource type="PackedScene" uid="uid://c7226krk4a43h" path="res://scenes/default_blocks/not_block.tscn" id="5_tv8l1"]
 [ext_resource type="PackedScene" uid="uid://d147l3vw723gk" path="res://scenes/custom_block_button.tscn" id="6_elt3i"]
 [ext_resource type="PackedScene" uid="uid://dwfltxi4a3i4k" path="res://scenes/block.tscn" id="7_8ek0a"]
 
-[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "or_btn", "not_btn", "wire_btn", "save_btn")]
+[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "not_btn", "wire_btn", "save_btn")]
 script = ExtResource("1_oe850")
 wire_scene = ExtResource("2_a05ga")
 and_scene = ExtResource("3_0dxhx")
-or_scene = ExtResource("4_esh3f")
 not_scene = ExtResource("5_tv8l1")
 name_edit = NodePath("top_hud/name")
 color_picker = NodePath("top_hud/color_picker")
 and_btn = NodePath("inventory/and_btn")
-or_btn = NodePath("inventory/or_btn")
 not_btn = NodePath("inventory/not_btn")
 wire_btn = NodePath("inventory/wire_btn")
 save_btn = NodePath("top_hud/save_btn")
@@ -44,10 +41,6 @@ layout_mode = 2
 [node name="and_btn" type="Button" parent="inventory"]
 layout_mode = 2
 text = "AND"
-
-[node name="or_btn" type="Button" parent="inventory"]
-layout_mode = 2
-text = "OR"
 
 [node name="not_btn" type="Button" parent="inventory"]
 layout_mode = 2
