@@ -9,6 +9,7 @@
 script = ExtResource("2_tewu6")
 incoming_count = 1
 outgoing_count = 1
+color = Color(1, 0.266667, 0.227451, 1)
 label = "not"
 block_name = "builtin_not"
 

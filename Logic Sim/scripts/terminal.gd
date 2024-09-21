@@ -22,9 +22,6 @@ var state: Global.State:
 		sprite.self_modulate = on_color if state == Global.State.ON else off_color
 		state_changed.emit()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	get_viewport().set_input_as_handled()

@@ -8,16 +8,17 @@ script = ExtResource("1_lua1o")
 label_node = NodePath("label")
 terminal_scene = ExtResource("2_thbi0")
 
+[node name="Area2D" type="Area2D" parent="." groups=["block_area"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+
 [node name="label" type="Label" parent="."]
-offset_bottom = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
-
-[node name="Area2D" type="Area2D" parent="." groups=["block_area"]]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

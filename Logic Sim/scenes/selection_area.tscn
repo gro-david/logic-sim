@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cs2b2xlnuff1j"]
+
+[ext_resource type="Script" path="res://scripts/selection_area.gd" id="1_ngdwr"]
+[ext_resource type="Texture2D" uid="uid://cbchiwln0dgpe" path="res://artwork/rect.png" id="2_evvb0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i3aey"]
+size = Vector2(0, 0)
+
+[node name="selection_area" type="Area2D"]
+script = ExtResource("1_ngdwr")
+modulate_color = Color(0.796243, 0.796243, 0.796243, 0.878431)
+
+[node name="collision_shape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_i3aey")
+debug_color = Color(0.907973, 0.000119749, 0.738268, 0.42)
+
+[node name="Sprite2D" type="Sprite2D" parent="collision_shape"]
+show_behind_parent = true
+texture = ExtResource("2_evvb0")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

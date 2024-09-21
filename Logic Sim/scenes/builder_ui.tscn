@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d147l3vw723gk" path="res://scenes/custom_block_button.tscn" id="6_elt3i"]
 [ext_resource type="PackedScene" uid="uid://dwfltxi4a3i4k" path="res://scenes/block.tscn" id="7_8ek0a"]
 
-[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "not_btn", "wire_btn", "save_btn")]
+[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "not_btn", "wire_btn", "save_btn", "clear_btn")]
 script = ExtResource("1_oe850")
 wire_scene = ExtResource("2_a05ga")
 and_scene = ExtResource("3_0dxhx")
@@ -18,6 +18,7 @@ and_btn = NodePath("inventory/and_btn")
 not_btn = NodePath("inventory/not_btn")
 wire_btn = NodePath("inventory/wire_btn")
 save_btn = NodePath("top_hud/save_btn")
+clear_btn = NodePath("top_hud/clear_btn")
 custom_block_button = ExtResource("6_elt3i")
 custom_block = ExtResource("7_8ek0a")
 
@@ -55,6 +56,14 @@ anchor_right = 1.0
 grow_horizontal = 2
 alignment = 2
 
+[node name="clear_btn" type="Button" parent="top_hud"]
+layout_mode = 2
+text = "Clear
+"
+
+[node name="color_picker" type="ColorPickerButton" parent="top_hud"]
+layout_mode = 2
+
 [node name="name" type="LineEdit" parent="top_hud"]
 layout_mode = 2
 
@@ -62,8 +71,5 @@ layout_mode = 2
 layout_mode = 2
 text = "Save"
 
-[node name="color_picker" type="ColorPickerButton" parent="top_hud"]
-layout_mode = 2
-
-[connection signal="text_changed" from="top_hud/name" to="." method="_on_name_text_changed"]
 [connection signal="color_changed" from="top_hud/color_picker" to="." method="_on_color_picker_color_changed"]
+[connection signal="text_changed" from="top_hud/name" to="." method="_on_name_text_changed"]

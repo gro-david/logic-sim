@@ -19,7 +19,6 @@ func _on_button_down() -> void:
 
 func _on_pressed() -> void:
 	if pressed_mouse_button == MOUSE_BUTTON_LEFT:
-		print('instantiate')
 		instantiate_block.emit(corresponding_block_data_path)
 	elif pressed_mouse_button == MOUSE_BUTTON_RIGHT:
 		$PopupMenu.position = get_global_rect().position

@@ -40,7 +40,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	calculate_line_points()
+	if start_placed and end_placed: return
 	if start_placed or end_placed:
 		global_position = Vector2.ZERO
 		calculate_line_points()
@@ -48,9 +48,12 @@ func _process(_delta):
 		global_position = get_global_mouse_position()
 
 func _unhandled_input(event: InputEvent) -> void:
+	get_viewport().set_input_as_handled()
 	if not start_placed and not end_placed or (start_placed and end_placed): return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		# actually we are appending the last two elements one more time, but after appending the second from the back the first one from the back becomes the second one
+		line.points[-1] = Helpers.get_position_on_building_grid(line.points[-1])
+		line.points[-2] = Helpers.get_position_on_building_grid(line.points[-2])
 		line.add_point(line.get_point_position(line.get_point_count() - 3))
 		line.add_point(line.get_point_position(line.get_point_count() - 3))
 		check_for_wire_completed.call_deferred()
@@ -106,7 +109,7 @@ func set_output_terminal():
 		Global.edit_wires = false
 
 func calculate_line_points():
-	var rounded_mouse_position: Vector2 = Helpers.get_position_on_building_grid(get_global_mouse_position())
+	var rounded_mouse_position: Vector2 = get_global_mouse_position()
 	if start_placed and not end_placed: calculate_line_points_backend(input_terminal.connection_node.global_position, rounded_mouse_position)
 	elif end_placed and not start_placed: calculate_line_points_backend(output_terminal.connection_node.global_position, rounded_mouse_position)
 	elif start_placed and end_placed: add_collision_shapes()

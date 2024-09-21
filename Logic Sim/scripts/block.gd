@@ -26,7 +26,6 @@ var block_width: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print('ready_called on ' + str(name))
 	set_meta('type', 'block')
 
 	var terminal_instance: Terminal = terminal_scene.instantiate()
@@ -146,16 +145,11 @@ func _process(_delta):
 	if Input.is_action_just_pressed('mouse_click'):
 		build_mode = false
 		show()
+		get_viewport().set_input_as_handled()
 
 
-func _on_label_gui_input(event:InputEvent) -> void:
-	print('gui event')
-	print(event)
+
+func _on_area_2d_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		queue_free()
-
-
-
-func _on_area_2d_input_event(viewport:Node, event:InputEvent, shape_idx:int) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-		queue_free()
+		get_viewport().set_input_as_handled()

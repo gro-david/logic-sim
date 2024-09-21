@@ -178,3 +178,5 @@ func save():
 	var save_file = FileAccess.open('user://blocks/' + data['info']['block_name'] + '.json', FileAccess.WRITE)
 
 	save_file.store_string(json)
+	$ui._on_clear_confirmed()
+	$ui.load_custom_blocks.call_deferred()

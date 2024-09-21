@@ -9,6 +9,7 @@
 script = ExtResource("2_20dip")
 incoming_count = 2
 outgoing_count = 1
+color = Color(0.392157, 0.901961, 0.266667, 1)
 label = "and"
 block_name = "builtin_and"
 
