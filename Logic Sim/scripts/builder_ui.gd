@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name BuilderUI
 
 @export_category('Scenes')
 @export var wire_scene: PackedScene
@@ -27,6 +28,8 @@ var custom_buttons_to_blocks: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.builder_ui = self
+
 	wire_btn.pressed.connect(instantiate_wire.bind())
 	and_btn.pressed.connect(instantiate_block.bind(and_scene))
 	not_btn.pressed.connect(instantiate_block.bind(not_scene))

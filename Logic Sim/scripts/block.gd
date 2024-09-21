@@ -12,6 +12,7 @@ class_name Block
 @export var label: String
 @export var offset: Vector2
 @export var build_mode: bool
+@export var move_mode: bool
 @export var block_name: String
 
 @export_category('Nodes')
@@ -139,17 +140,31 @@ func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_positio
 	return terminals
 
 func _process(_delta):
-	if not build_mode: return
-	if Input.is_action_pressed('escape'): queue_free()
+	if not build_mode and not move_mode: return
+	if Input.is_action_pressed('escape') and not move_mode: queue_free()
 	global_position = Helpers.get_position_on_building_grid(get_global_mouse_position()) - Vector2(block_width, block_height) / 2
+
+	for terminal in incoming:
+		if not terminal.connected_wire: continue
+		terminal.connected_wire.calculate_line_points()
+	for terminal in outgoing:
+		if not terminal.connected_wire: continue
+		terminal.connected_wire.calculate_line_points()
+
 	if Input.is_action_just_pressed('mouse_click'):
 		build_mode = false
 		show()
-		get_viewport().set_input_as_handled()
+		# get_viewport().set_input_as_handled()
 
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_released('mouse_click'):
+		move_mode = false
 
 
 func _on_area_2d_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-		queue_free()
-		get_viewport().set_input_as_handled()
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			queue_free()
+			get_viewport().set_input_as_handled()
+		elif event.button_index == MOUSE_BUTTON_LEFT and not build_mode:
+			move_mode = true

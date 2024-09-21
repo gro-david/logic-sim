@@ -15,6 +15,7 @@ shape = SubResource("RectangleShape2D_i3aey")
 debug_color = Color(0.907973, 0.000119749, 0.738268, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="collision_shape"]
+self_modulate = Color(1, 0, 1, 0.443137)
 show_behind_parent = true
 texture = ExtResource("2_evvb0")
 

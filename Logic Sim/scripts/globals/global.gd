@@ -7,6 +7,8 @@ var building_grid_size: int = 32
 
 var block_path: String = 'user://blocks'
 
+var builder_ui: BuilderUI
+
 # state of the terminals lamps and wires
 enum State {OFF, ON}
 

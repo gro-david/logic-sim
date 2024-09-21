@@ -9,6 +9,8 @@ on_color = Color(0, 0.878431, 0.0627451, 1)
 off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
 [node name="Line2D" type="Line2D" parent="."]
+z_index = -1
+z_as_relative = false
 points = PackedVector2Array(0, 0, 16, 0, 16, 16)
 width = 5.0
 joint_mode = 2

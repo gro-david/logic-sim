@@ -24,3 +24,4 @@ wires = NodePath("wires")
 [node name="wires" type="Node2D" parent="."]
 
 [node name="selection_area" parent="." instance=ExtResource("4_ihmsd")]
+modulate_color = null
