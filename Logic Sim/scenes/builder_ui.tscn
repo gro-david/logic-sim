@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://da8mb1ryuusws"]
+[gd_scene load_steps=10 format=3 uid="uid://da8mb1ryuusws"]
 
 [ext_resource type="Script" path="res://scripts/builder_ui.gd" id="1_oe850"]
 [ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="2_a05ga"]
@@ -6,8 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://c7226krk4a43h" path="res://scenes/default_blocks/not_block.tscn" id="5_tv8l1"]
 [ext_resource type="PackedScene" uid="uid://d147l3vw723gk" path="res://scenes/custom_block_button.tscn" id="6_elt3i"]
 [ext_resource type="PackedScene" uid="uid://dwfltxi4a3i4k" path="res://scenes/block.tscn" id="7_8ek0a"]
+[ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="7_hma36"]
+[ext_resource type="Script" path="res://scripts/mouse_in_ui_check.gd" id="7_unbpu"]
 
-[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "not_btn", "wire_btn", "save_btn", "clear_btn")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkxup"]
+size = Vector2(32, 1200)
+
+[node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "not_btn", "wire_btn", "save_btn", "clear_btn", "edit_btn")]
 script = ExtResource("1_oe850")
 wire_scene = ExtResource("2_a05ga")
 and_scene = ExtResource("3_0dxhx")
@@ -19,8 +24,10 @@ not_btn = NodePath("inventory/not_btn")
 wire_btn = NodePath("inventory/wire_btn")
 save_btn = NodePath("top_hud/save_btn")
 clear_btn = NodePath("top_hud/clear_btn")
+edit_btn = NodePath("top_hud/edit_btn")
 custom_block_button = ExtResource("6_elt3i")
 custom_block = ExtResource("7_8ek0a")
+terminal = ExtResource("7_hma36")
 
 [node name="inventory" type="HBoxContainer" parent="."]
 anchors_preset = 12
@@ -31,45 +38,86 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3
 alignment = 1
+script = ExtResource("7_unbpu")
 
 [node name="wire_btn" type="Button" parent="inventory"]
 layout_mode = 2
 text = "WIRE"
+script = ExtResource("7_unbpu")
 
 [node name="VSeparator2" type="VSeparator" parent="inventory"]
 layout_mode = 2
+script = ExtResource("7_unbpu")
 
 [node name="and_btn" type="Button" parent="inventory"]
 layout_mode = 2
 text = "AND"
+script = ExtResource("7_unbpu")
 
 [node name="not_btn" type="Button" parent="inventory"]
 layout_mode = 2
 text = "NOT"
+script = ExtResource("7_unbpu")
 
 [node name="VSeparator" type="VSeparator" parent="inventory"]
 layout_mode = 2
+script = ExtResource("7_unbpu")
 
 [node name="top_hud" type="HBoxContainer" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
+offset_left = 32.0
+offset_right = -32.0
+offset_bottom = 32.0
 grow_horizontal = 2
+size_flags_horizontal = 3
 alignment = 2
+script = ExtResource("7_unbpu")
+
+[node name="edit_btn" type="Button" parent="top_hud"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Enter Edit Mode"
+script = ExtResource("7_unbpu")
 
 [node name="clear_btn" type="Button" parent="top_hud"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Clear
 "
+script = ExtResource("7_unbpu")
 
 [node name="color_picker" type="ColorPickerButton" parent="top_hud"]
 layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("7_unbpu")
 
 [node name="name" type="LineEdit" parent="top_hud"]
 layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("7_unbpu")
 
 [node name="save_btn" type="Button" parent="top_hud"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Save"
+script = ExtResource("7_unbpu")
+
+[node name="input_terminal_place_area" type="Area2D" parent="." groups=["terminal_placement_area"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="input_terminal_place_area"]
+position = Vector2(16, 600)
+shape = SubResource("RectangleShape2D_rkxup")
+debug_color = Color(0.563315, 0.558729, 1.92523e-07, 0.42)
+
+[node name="output_terminal_place_region" type="Area2D" parent="." groups=["terminal_placement_area"]]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="output_terminal_place_region"]
+position = Vector2(1904, 600)
+shape = SubResource("RectangleShape2D_rkxup")
+debug_color = Color(0.563315, 0.558729, 1.92523e-07, 0.42)
 
 [connection signal="color_changed" from="top_hud/color_picker" to="." method="_on_color_picker_color_changed"]
 [connection signal="text_changed" from="top_hud/name" to="." method="_on_name_text_changed"]
+[connection signal="input_event" from="input_terminal_place_area" to="." method="_on_input_terminal_place_area_input_event"]
+[connection signal="input_event" from="output_terminal_place_region" to="." method="_on_output_terminal_place_region_input_event"]

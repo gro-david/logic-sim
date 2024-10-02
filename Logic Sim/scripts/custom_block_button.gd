@@ -9,6 +9,9 @@ var corresponding_block_data_path: String
 
 var pressed_mouse_button: int
 
+func _ready() -> void:
+	mouse_entered.connect(func(): Global.cursor_on_ui = true)
+	mouse_exited.connect(func(): Global.cursor_on_ui = false)
 
 func _on_button_down() -> void:
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):

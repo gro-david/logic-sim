@@ -32,6 +32,7 @@ window/size/mode=3
 wire_area=""
 terminal_area=""
 block_area=""
+terminal_placement_area=""
 
 [input]
 

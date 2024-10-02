@@ -2,12 +2,17 @@ extends Node
 
 signal terminal_changed
 signal edit_wires_changed
+signal block_placed
 
-var building_grid_size: int = 32
+var building_grid_size: int = 28
 
 var block_path: String = 'user://blocks'
 
 var builder_ui: BuilderUI
+
+var cursor_on_ui: bool
+
+var cursor_in_element: bool
 
 # state of the terminals lamps and wires
 enum State {OFF, ON}
@@ -17,6 +22,7 @@ var edit_wires: bool = false:
 	set(value):
 		edit_wires = value
 		edit_wires_changed.emit()
+var edit_mode: bool = false
 var terminal: Terminal:
 	set(value):
 		terminal = value

@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://scripts/wire.gd" id="1_y5noo"]
 
 [node name="wire" type="Node2D" node_paths=PackedStringArray("line")]
+top_level = true
+z_index = 1000
+z_as_relative = false
 script = ExtResource("1_y5noo")
 line = NodePath("Line2D")
 on_color = Color(0, 0.878431, 0.0627451, 1)

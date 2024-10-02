@@ -1,6 +1,7 @@
 extends Node
 
 func merge_dicts_recursively(a: Dictionary, b: Dictionary) -> Dictionary:
+	if len(b.keys()) == 0: return a
 	if a.has(b.keys()[0]):
 		a[b.keys()[0]] = merge_dicts_recursively(a[b.keys()[0]], b[b.keys()[0]])
 	else:

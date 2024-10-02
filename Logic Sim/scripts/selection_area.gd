@@ -26,6 +26,7 @@ func selection():
 		get_viewport().set_input_as_handled()
 	elif Input.is_action_just_pressed('mouse_click'):
 		for area in selected_areas:
+			if not is_instance_valid(area): continue
 			area.get_parent().modulate = Color('ffffff')
 		selected_areas.clear()
 	$collision_shape/Sprite2D.scale = abs(second_corner - first_corner) / Vector2(17, 17)
@@ -44,4 +45,5 @@ func delete():
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group('terminal_area'): return
+	if area.is_in_group('terminal_placement_area'): return
 	selected_areas.append(area)

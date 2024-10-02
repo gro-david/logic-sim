@@ -1,14 +1,15 @@
 extends Node2D
+class_name Builder
 
 @export_category('Terminals')
 @export var input_terminal_scene: PackedScene
 @export var output_terminal_scene: PackedScene
-@export var input_terminal_count: int = 1
-@export var output_terminal_count: int = 1
+@export var input_terminal_count: int = 0
+@export var output_terminal_count: int = 0
 @export var input_terminal_spacing: int = 0
 @export var output_terminal_spacing: int = 0
 @export var input_terminal_x_position: float = 24
-@export var output_terminal_x_position: float = 1896
+@export var output_terminal_x_position: float = 1884
 
 @export_category('Nodes')
 @export var blocks: Node2D
@@ -39,82 +40,23 @@ func _ready():
 	output_terminal_instance = output_terminal_scene.instantiate()
 	output_terminal_height = output_terminal_instance.sprite.texture.get_height() * output_terminal_instance.scale.y + output_terminal_spacing
 
-	var input_terminal_count_even := input_terminal_count % 2 == 0
-	var output_terminal_count_even := output_terminal_count % 2 == 0
+# this instantiates a terminal with the correct variables set and saves it in the correct array
+func instantiate_terminal(terminal: PackedScene, click_position: Vector2, is_input: bool):
+	var terminal_instance: Terminal = terminal.instantiate()
+	terminal_instance.global_position = Helpers.get_position_on_building_grid(click_position)
+	terminal_instance.global_position.x = input_terminal_x_position if is_input else output_terminal_x_position
+	terminal_instance.input_terminal = is_input
+	terminal_instance.allow_user_input = is_input
+	terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
+	add_child(terminal_instance)
+	if is_input:
+		input_terminals.append(terminal_instance)
+		input_terminal_count = len(input_terminals)
+	else:
+		output_terminals.append(terminal_instance)
+		output_terminal_count = len(output_terminals)
 
-	if input_terminal_count_even: input_terminals = instantiate_terminal_even_count(input_terminal_scene, input_terminal_count, input_terminal_x_position, input_terminal_height, false, true)
-	else: input_terminals = instantiate_terminal_odd_count(input_terminal_scene, input_terminal_count, input_terminal_x_position, input_terminal_height, false, true)
-	if output_terminal_count_even: output_terminals = instantiate_terminal_even_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
-	else: output_terminals = instantiate_terminal_odd_count(output_terminal_scene, output_terminal_count, output_terminal_x_position, output_terminal_height, true, false)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
-
-func instantiate_terminal_even_count(terminal: PackedScene, count: int, x_position: float, height: float, flip: bool, is_input: bool) -> Array[Terminal]:
-	var half_point = int(count / 2.0)
-	var terminals: Array[Terminal] = []
-	for i in range(count):
-		# we either move the terminal down or up depending on if we are above or below the middle
-		if i < half_point:
-			var terminal_instance: Terminal = terminal.instantiate()
-			terminal_instance.global_position = Vector2(x_position, center_y_position + ((i % half_point) * height + 0.5 * height))
-			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
-			terminal_instance.scale.x *= -1 if flip else 1
-			terminal_instance.input_terminal = is_input
-			terminal_instance.allow_user_input = is_input
-			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
-			add_child(terminal_instance)
-			terminals.append(terminal_instance)
-		else:
-			var terminal_instance: Terminal = terminal.instantiate()
-			terminal_instance.global_position = Vector2(x_position, center_y_position - ((i % half_point) * height + 0.5 * height))
-			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
-			terminal_instance.scale.x *= -1 if flip else 1
-			terminal_instance.input_terminal = is_input
-			terminal_instance.allow_user_input = is_input
-			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
-			add_child(terminal_instance)
-			terminals.append(terminal_instance)
-	return terminals
-
-func instantiate_terminal_odd_count(terminal: PackedScene, count: int, x_position: float, height: float, flip: bool, is_input: bool) -> Array[Terminal]:
-	var half_point = int((count - 1) / 2.0)
-	var terminals: Array[Terminal] = []
-	for i in range(count):
-		# we either move the terminal down or up or not depending on if we are below or above the middle
-		if i < half_point:
-			var terminal_instance: Terminal = terminal.instantiate()
-			terminal_instance.global_position = Vector2(x_position, center_y_position + ((i % half_point) + 1) * height)
-			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
-			terminal_instance.scale.x *= -1 if flip else 1
-			terminal_instance.input_terminal = is_input
-			terminal_instance.allow_user_input = is_input
-			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
-			add_child(terminal_instance)
-			terminals.append(terminal_instance)
-		elif i == half_point:
-			var terminal_instance: Terminal = terminal.instantiate()
-			terminal_instance.global_position = Vector2(x_position, center_y_position)
-			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
-			terminal_instance.scale.x *= -1 if flip else 1
-			terminal_instance.input_terminal = is_input
-			terminal_instance.allow_user_input = is_input
-			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
-			add_child(terminal_instance)
-			terminals.append(terminal_instance)
-		else:
-			var terminal_instance: Terminal = terminal.instantiate()
-			terminal_instance.global_position = Vector2(x_position, center_y_position - ((i % half_point) + 1) * height)
-			terminal_instance.global_position = Helpers.get_position_on_building_grid(terminal_instance.global_position)
-			terminal_instance.scale.x *= -1 if flip else 1
-			terminal_instance.input_terminal = is_input
-			terminal_instance.allow_user_input = is_input
-			terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'
-			add_child(terminal_instance)
-			terminals.append(terminal_instance)
-	return terminals
-
+# cycles through all of the possible states of the inputs, then gets their outputs and merges the output dicts
 func simulate() -> Dictionary:
 	var result: Dictionary = {}
 
@@ -123,14 +65,18 @@ func simulate() -> Dictionary:
 		for j in range(len(input_terminals)):
 			var terminal = input_terminals[j]
 			terminal.state = int(states[j])
+		print(result)
+		print(get_input_output())
 		result = Helpers.merge_dicts_recursively(result, get_input_output())
+		print(result)
 
 	for terminal in input_terminals:
 		terminal.state = Global.State.OFF
 
 	return result
 
-
+# this gets the current state of all the inputs and outputs and returns it as a recursive dictionary with the following form:
+	# {first_state: {second_state: [output_states]}}
 func get_input_output() -> Dictionary:
 	var dict: Dictionary = {}
 	var last_dict: Dictionary = dict
@@ -148,6 +94,7 @@ func get_input_output() -> Dictionary:
 
 	return dict
 
+# saves the current block that is being built to a json file. it uses the simulaten function that makes it simulate all the states which also get exporteds
 func save():
 	var data: Dictionary = {}
 
@@ -165,6 +112,7 @@ func save():
 		data['blocks'].append(block_data)
 
 	for wire in wires.get_children():
+		if not wire.input_terminal or not wire.output_terminal: continue
 		var input_terminal_path: String = 'block_' + wire.input_terminal.get_parent().name + '/terminal_' + wire.input_terminal.name
 		var output_terminal_path: String = 'block_' + wire.output_terminal.get_parent().name + '/terminal_' + wire.output_terminal.name
 		var wire_data: Dictionary = {'input_terminal':  input_terminal_path.replace('block_builder', ''), 'output_terminal': output_terminal_path.replace('block_builder', '')}
