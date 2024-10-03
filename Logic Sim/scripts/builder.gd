@@ -65,10 +65,7 @@ func simulate() -> Dictionary:
 		for j in range(len(input_terminals)):
 			var terminal = input_terminals[j]
 			terminal.state = int(states[j])
-		print(result)
-		print(get_input_output())
 		result = Helpers.merge_dicts_recursively(result, get_input_output())
-		print(result)
 
 	for terminal in input_terminals:
 		terminal.state = Global.State.OFF

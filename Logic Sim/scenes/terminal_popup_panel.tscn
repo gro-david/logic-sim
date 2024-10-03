@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bi4bmujwt6xvu"]
+
+[node name="PopupPanel" type="PopupPanel"]
+auto_translate_mode = 1
+size = Vector2i(306, 409)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 302.0
+offset_bottom = 405.0
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "Block Name"
+
+[node name="ColorPicker" type="ColorPicker" parent="VBoxContainer"]
+layout_mode = 2
+color_modes_visible = false
+sliders_visible = false
+presets_visible = false
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Delete"

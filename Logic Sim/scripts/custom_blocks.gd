@@ -10,21 +10,23 @@ func _ready() -> void:
 	outgoing_count = block_data['info']['output_terminal_count']
 	label = block_data['info']['block_name'].replace('_', ' ')
 	color = Color.from_string(block_data['info']['color'], '#ffffff')
-	permutations = Helpers.dict_key_to_int_recursively(block_data['permutations'])
+	permutations = block_data['permutations']
 	build_mode = true
 
 	$Area2D/CollisionShape2D.shape = RectangleShape2D.new()
 
 	super()
 
+
 func update_states():
 	var last_dict: Dictionary = permutations
 	var outgoing_states: Array
+	# for now we have no more efficient option than to just convert the states of the terminals to strings, since thats how they are saved
 	for terminal in incoming:
 		if terminal == incoming[-1]:
-			outgoing_states = last_dict[terminal.state]
+			outgoing_states = last_dict[str(terminal.state)]
 			break
-		last_dict = last_dict[terminal.state]
+		last_dict = last_dict[str(terminal.state)]
 	for i in range(len(outgoing)):
 		var terminal: Terminal = outgoing[i]
 		terminal.state = outgoing_states[i]

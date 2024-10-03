@@ -107,7 +107,6 @@ func instantiate_terminal_odd_count(count: int, x_position: float, is_input: boo
 		else:
 			var terminal_position: Vector2 = Vector2(x_position, half_point_position + (Global.building_grid_size * (i % half_point)))
 			terminals.append(instantiate_single_terminal(terminal_position, is_input))
-			print(terminals[-1])
 	return terminals
 
 func instantiate_single_terminal(terminal_position: Vector2, is_input: bool) -> Terminal:
@@ -152,6 +151,7 @@ func _on_area_2d_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			queue_free()
+			Global.cursor_in_element = false
 			get_viewport().set_input_as_handled()
 		elif event.button_index == MOUSE_BUTTON_LEFT and not build_mode:
 			move_mode = true

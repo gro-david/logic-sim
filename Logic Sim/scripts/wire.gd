@@ -78,6 +78,7 @@ func check_for_wire_completed():
 	line.remove_point(line.get_point_count() - 1)
 	line.remove_point(line.get_point_count() - 1)
 	calculate_line_points()
+	update_states()
 	Global.builder_ui.instantiate_wire()
 
 
@@ -99,11 +100,13 @@ func set_input_terminal():
 	input_terminal = Global.terminal
 	input_terminal.connected_wire = self
 	start_placed = true
+	on_color = input_terminal.on_color
 	input_terminal.state_changed.connect(update_states.bind())
 	# we check if the other terminal is not null. if this is the case the wire has been finished so we disconnect the signal and exit edit mode
 	if output_terminal != null:
 		Global.terminal_changed.disconnect(set_terminal.bind())
 		Global.edit_wires = false
+		output_terminal.on_color = on_color
 	else:
 		first_placed_terminal = input_terminal
 
@@ -153,8 +156,12 @@ func add_collision_shapes() -> void:
 		$Area2D.add_child(collision_shape)
 
 func update_states():
-	state = input_terminal.state
-	output_terminal.state = input_terminal.state
+	if input_terminal:
+		on_color = input_terminal.on_color
+		state = input_terminal.state
+	if output_terminal:
+		output_terminal.on_color = on_color
+		output_terminal.state = input_terminal.state
 
 func _notification(what):
 	if (what == NOTIFICATION_PREDELETE):
