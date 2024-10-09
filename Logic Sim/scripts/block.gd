@@ -14,7 +14,7 @@ class_name Block
 @export var build_mode: bool
 @export var move_mode: bool
 @export var block_name: String
-@export var multi_placement_y_gap: float = 64
+@export var multi_placement_y_gap: float = 0
 
 @export_category('Nodes')
 @export var label_node: Label
@@ -30,6 +30,8 @@ var placement_offset: Vector2 = Vector2.ZERO
 
 # instantiating the block and setting
 func _ready():
+	print(incoming_count)
+
 	set_meta('type', 'block')
 
 	var terminal_instance: Terminal = terminal_scene.instantiate()
@@ -92,6 +94,7 @@ func instantiate_terminal_even_count(count: int, x_position: float, is_input: bo
 			var terminal_position: Vector2 = Vector2(x_position, half_point_position + (i % half_point + 1) * Global.building_grid_size)
 			terminals.append(instantiate_single_terminal(terminal_position, is_input))
 	return terminals
+
 func instantiate_terminal_odd_count(count: int, x_position: float, is_input: bool) -> Array[Terminal]:
 	var half_point = int((count - 1) / 2.0)
 	var half_point_position = block_height / 2
@@ -99,13 +102,13 @@ func instantiate_terminal_odd_count(count: int, x_position: float, is_input: boo
 	for i in range(count):
 		# we either move the terminal down or up or not depending on if we are below or above the middle
 		if i < half_point:
-			var terminal_position: Vector2 = Vector2(x_position, half_point_position - (Global.building_grid_size * (i % half_point)))
+			var terminal_position: Vector2 = Vector2(x_position, half_point_position - (Global.building_grid_size * (i % half_point + 1)))
 			terminals.append(instantiate_single_terminal(terminal_position, is_input))
 		elif i == half_point:
 			var terminal_position: Vector2 = Vector2(x_position, half_point_position)
 			terminals.append(instantiate_single_terminal(terminal_position, is_input))
 		else:
-			var terminal_position: Vector2 = Vector2(x_position, half_point_position + (Global.building_grid_size * (i % half_point)))
+			var terminal_position: Vector2 = Vector2(x_position, half_point_position + (Global.building_grid_size * (i % half_point + 1)))
 			terminals.append(instantiate_single_terminal(terminal_position, is_input))
 	return terminals
 
@@ -137,6 +140,7 @@ func _process(_delta):
 
 	if Input.is_action_just_pressed('mouse_click') and not Global.cursor_on_ui and not Global.cursor_in_element:
 		build_mode = false
+		placement_offset = Vector2.ZERO
 		Global.block_placed.emit()
 		show()
 		# get_viewport().set_input_as_handled()

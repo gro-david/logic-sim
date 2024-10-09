@@ -9,4 +9,3 @@ script = ExtResource("1_sa8wf")
 [node name="block" parent="." instance=ExtResource("2_wekam")]
 position = Vector2(840, 456)
 color = Color(0.497474, 0.497474, 0.497474, 1)
-multi_placement_y_gap = 64.0

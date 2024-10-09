@@ -58,38 +58,43 @@ func instantiate_terminal(terminal: PackedScene, click_position: Vector2, is_inp
 
 # cycles through all of the possible states of the inputs, then gets their outputs and merges the output dicts
 func simulate() -> Dictionary:
-	var result: Dictionary = {}
-
-	for i in range(pow(2, input_terminal_count)):
-		var states = String.num_int64(i, 2).pad_zeros(input_terminal_count).split('')
-		for j in range(len(input_terminals)):
-			var terminal = input_terminals[j]
-			terminal.state = int(states[j])
-		result = Helpers.merge_dicts_recursively(result, get_input_output())
-
-	for terminal in input_terminals:
-		terminal.state = Global.State.OFF
-
-	return result
-
-# this gets the current state of all the inputs and outputs and returns it as a recursive dictionary with the following form:
-	# {first_state: {second_state: [output_states]}}
-func get_input_output() -> Dictionary:
-	var dict: Dictionary = {}
-	var last_dict: Dictionary = dict
-	var output_array: Array = []
+	var expression_variables: Array[String]
+	var expressions: Array[String]
+	for i in range(input_terminal_count):
+		expression_variables.append('i' + str(i))
 
 	for terminal in output_terminals:
-		output_array.append(terminal.state)
+		expressions.append(get_terminal_input(terminal))
 
-	for terminal in input_terminals:
-		if terminal == input_terminals[-1]:
-			last_dict[terminal.state] = output_array
-			break
-		last_dict[terminal.state] = {}
-		last_dict = last_dict[terminal.state]
+	return {'expressions': expressions, 'variables': expression_variables}
 
-	return dict
+func get_terminal_input(terminal: Terminal) -> String:
+	var wire: Wire = terminal.connected_wire
+
+	if wire == null: return '(null)'
+
+	var root_terminal: Terminal = wire.input_terminal
+
+	if root_terminal == null: return '(null)'
+
+	var root_block: Block = root_terminal.parent_block
+
+
+	if root_block == null:
+		return 'i' + str(input_terminals.find(wire.input_terminal))
+
+	if root_block is not CustomBlock:
+		match root_block.block_name:
+			'builtin_and': return '(' + get_terminal_input(root_block.incoming[0]) + ' and ' + get_terminal_input(root_block.incoming[1]) + ')'
+			'builtin_not': return '(not ' + get_terminal_input(root_block.incoming[0]) + ')'
+
+	root_block = root_block as CustomBlock
+
+	var root_block_input_expressions: Array[String] = []
+	for root_block_input_terminal in root_block.incoming:
+		root_block_input_expressions.append(get_terminal_input(root_block_input_terminal))
+
+	return root_block.get_boolean_expression(root_block_input_expressions)
 
 # saves the current block that is being built to a json file. it uses the simulaten function that makes it simulate all the states which also get exporteds
 func save():
@@ -101,8 +106,20 @@ func save():
 		'output_terminal_count': output_terminal_count,
 		'color': built_block_color.to_html(false)
 	}
+	data['input_terminals'] = []
+	data['output_terminals'] = []
 	data['blocks'] = []
 	data['wires'] = []
+
+	for i in range(len(input_terminals)):
+		var terminal = input_terminals[i]
+		var terminal_data = {'index': i, 'color': terminal.on_color, 'x': terminal.global_position.x, 'y': terminal.global_position.y}
+		data['input_terminals'].append(terminal_data)
+
+	for i in range(len(output_terminals)):
+		var terminal = output_terminals[i]
+		var terminal_data = {'index': i, 'color': terminal.on_color, 'x': terminal.global_position.x, 'y': terminal.global_position.y}
+		data['input_terminals'].append(terminal_data)
 
 	for block in blocks.get_children():
 		var block_data: Dictionary = {'index': int(str(block.name)), 'name_id': block.block_name, 'x': block.global_position.x, 'y': block.global_position.y}
@@ -115,7 +132,9 @@ func save():
 		var wire_data: Dictionary = {'input_terminal':  input_terminal_path.replace('block_builder', ''), 'output_terminal': output_terminal_path.replace('block_builder', '')}
 		data['wires'].append(wire_data)
 
-	data['permutations'] = simulate()
+	var simulation_result: Dictionary = simulate()
+	data['boolean_expressions'] = simulation_result['expressions']
+	data['boolean_expression_variables'] = simulation_result['variables']
 
 	if not DirAccess.dir_exists_absolute(Global.block_path): DirAccess.make_dir_absolute(Global.block_path)
 
