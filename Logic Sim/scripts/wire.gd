@@ -15,21 +15,18 @@ var first_placed_terminal: Terminal
 @export var on_color: Color
 @export var off_color: Color
 
-@export_group('Test')
-@export var state: Global.State:
+var state: Global.State:
 	# when this changes, update the color and emit the signal to notify the blocks
 	set(value):
 		state = value
 		line.self_modulate = on_color if state == Global.State.ON else off_color
-
-@export var start_placed: bool = false:
+var start_placed: bool = false:
 	set(value):
 		start_placed = value
 		if start_placed:
 			show()
 			calculate_line_points()
-
-@export var end_placed: bool = false:
+var end_placed: bool = false:
 	set(value):
 		end_placed = value
 		if end_placed:

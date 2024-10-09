@@ -18,8 +18,8 @@ signal state_changed
 
 @export_category('Scenes')
 @export var popup_panel_scene: PackedScene
-var connected_wire: Wire
 
+var connected_wire: Wire
 var state: Global.State:
 	set(value):
 		state = value
@@ -29,6 +29,11 @@ var state: Global.State:
 # place wires/change the state of the terminal
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if not event is InputEventMouseButton or not event.pressed or Input.is_action_pressed('ctrl'): return
+	if Global.edit_mode: edit_mode_input_behavior(event)
+	else: normal_mode_input_behavior(event)
+func normal_mode_input_behavior(event: InputEventMouseButton) -> void:
+	pass
+func edit_mode_input_behavior(event: InputEventMouseButton) -> void:
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		# if we are editing the wires we will not change the state but save the current terminal to be able to reference it
 		if Global.edit_wires:
@@ -46,7 +51,6 @@ func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int
 func _notification(what):
 	if (what == NOTIFICATION_PREDELETE):
 		if is_instance_valid(connected_wire): connected_wire.queue_free()
-
 
 func _on_color_picker_color_changed(color: Color) -> void:
 	on_color = color

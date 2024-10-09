@@ -9,7 +9,6 @@
 script = ExtResource("1_ah7ta")
 input_terminal_scene = ExtResource("2_h4gki")
 output_terminal_scene = ExtResource("2_h4gki")
-input_terminal_count = 2
 input_terminal_spacing = 4
 output_terminal_spacing = 4
 input_terminal_x_position = 16.0

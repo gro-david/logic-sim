@@ -19,5 +19,6 @@
 			"output_terminal": "/terminal_2"
 		}
 	],
-	"permutations": []
+	"boolean_expressions": [[], [], []],
+	"boolean_expression_variables": []
 }
