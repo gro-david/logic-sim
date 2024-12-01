@@ -32,3 +32,6 @@ func dict_key_to_int_recursively(dict: Dictionary) -> Dictionary:
 
 func get_position_on_building_grid(position: Vector2) -> Vector2:
 	return round(position / Global.building_grid_size) * Global.building_grid_size
+
+func debug(node, line, msg):
+	print("[%s, %s@%s] %s" % [node, node.get_script().get_path(), line, msg])

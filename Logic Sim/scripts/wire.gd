@@ -40,6 +40,7 @@ var additional_points: Array[Vector2] = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_meta('type', 'wire')
+	Helpers.debug(self,88,"test")
 	state = Global.State.OFF
 	Global.edit_wires = true
 	Global.terminal_changed.connect(set_terminal.bind())
@@ -88,6 +89,7 @@ func set_terminal():
 	# depending on if the terminal allows input we either set the input or the output
 	if Global.terminal.input_terminal:
 		set_input_terminal()
+		Helpers.debug(self,88,"test")
 	else:
 		set_output_terminal()
 

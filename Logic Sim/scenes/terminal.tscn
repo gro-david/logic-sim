@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cllrt0r8uh583"]
+[gd_scene load_steps=5 format=3 uid="uid://cllrt0r8uh583"]
 
 [ext_resource type="Script" path="res://scripts/terminal.gd" id="1_b6myk"]
+[ext_resource type="PackedScene" uid="uid://bi4bmujwt6xvu" path="res://scenes/terminal_popup_panel.tscn" id="2_00n37"]
 [ext_resource type="Texture2D" uid="uid://vba4qtk336rf" path="res://artwork/terminal.png" id="2_ymhbw"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6mqpm"]
@@ -16,6 +17,7 @@ on_color = Color(0.0627451, 0.870588, 0.0627451, 1)
 off_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 sprite = NodePath("sprite")
 connection_node = NodePath("connection")
+popup_panel_scene = ExtResource("2_00n37")
 metadata/_edit_use_anchors_ = true
 
 [node name="sprite" type="Sprite2D" parent="."]
