@@ -5,7 +5,6 @@
 
 [node name="block" type="Node2D" node_paths=PackedStringArray("label_node")]
 script = ExtResource("1_lua1o")
-multi_placement_y_gap = 8.0
 label_node = NodePath("label")
 terminal_scene = ExtResource("2_thbi0")
 

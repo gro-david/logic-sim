@@ -43,6 +43,11 @@ func _ready() -> void:
 # place wires/change the state of the terminal
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if not event is InputEventMouseButton or not event.pressed or Input.is_action_pressed('ctrl'): return
+	if Global.edit_mode: edit_mode_input_behavior(event)
+	else: normal_mode_input_behavior(event)
+func normal_mode_input_behavior(event: InputEventMouseButton) -> void:
+	pass
+func edit_mode_input_behavior(event: InputEventMouseButton) -> void:
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		# if we are editing the wires we will not change the state but save the current terminal to be able to reference it
 		if Global.edit_wires:

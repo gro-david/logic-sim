@@ -87,6 +87,7 @@ func delete_custom_block(block_path: String) -> void:
 func _on_delete_confirmed(block_path: String) -> void:
 	DirAccess.remove_absolute(block_path)
 	for block in custom_buttons_to_blocks[block_path]:
+		if not is_instance_valid(block): continue
 		block.queue_free()
 	load_custom_blocks.call_deferred()
 
@@ -109,7 +110,7 @@ func multi_placement_behavior(instance: Block) -> void:
 			blocks_being_placed.remove_at(i)
 
 	if len(blocks_being_placed) > 0:
-		instance.placement_offset = Vector2(0, -blocks_being_placed[-1].block_height / 2 - instance.block_height / 2 - instance.multi_placement_y_gap) + blocks_being_placed[-1].placement_offset
+		instance.placement_offset = Vector2(0, -(blocks_being_placed[-1].block_height / 2) - (instance.block_height / 2) - instance.multi_placement_y_gap) + blocks_being_placed[-1].placement_offset
 	blocks_being_placed.append(instance)
 
 func clear_builder():
