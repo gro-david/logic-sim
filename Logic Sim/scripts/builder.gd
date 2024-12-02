@@ -8,8 +8,6 @@ class_name Builder
 @export var output_terminal_count: int = 0
 @export var input_terminal_spacing: int = 0
 @export var output_terminal_spacing: int = 0
-@export var input_terminal_x_position: float = 24
-@export var output_terminal_x_position: float = 1884
 
 @export_category('Nodes')
 @export var blocks: Node2D
@@ -21,6 +19,10 @@ var output_terminal_instance: Terminal
 var input_terminal_height: float
 var output_terminal_height: float
 
+var top_terminals: Array[Terminal]
+var bottom_terminals: Array[Terminal]
+var left_terminals: Array[Terminal]
+var right_terminals: Array[Terminal]
 var input_terminals: Array[Terminal]
 var output_terminals: Array[Terminal]
 
@@ -31,20 +33,45 @@ var wire_count: int = 0
 var built_block_name: String = 'Block Name'
 var built_block_color: Color = Color((randf() + 1) / 2, (randf() + 1) / 2, (randf() + 1) / 2)
 
+var terminal_positions: Dictionary = {Global.Side.TOP: 48, Global.Side.BOTTOM: 1152, Global.Side.LEFT: 16, Global.Side.RIGHT: 1904}
+var output_terminal_offset = 10
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# instantiate the terminals to save the height then delete them
 	input_terminal_instance = input_terminal_scene.instantiate()
-	input_terminal_height = input_terminal_instance.sprite.texture.get_height() * input_terminal_instance.scale.y + input_terminal_spacing
+	input_terminal_height = input_terminal_instance.terminal_height * input_terminal_instance.scale.y + input_terminal_spacing
 	input_terminal_instance.queue_free()
 	output_terminal_instance = output_terminal_scene.instantiate()
-	output_terminal_height = output_terminal_instance.sprite.texture.get_height() * output_terminal_instance.scale.y + output_terminal_spacing
+	output_terminal_height = output_terminal_instance.terminal_height * output_terminal_instance.scale.y + output_terminal_spacing
 
 # this instantiates a terminal with the correct variables set and saves it in the correct array
-func instantiate_terminal(terminal: PackedScene, click_position: Vector2, is_input: bool):
+func instantiate_terminal(terminal: PackedScene, click_position: Vector2, is_input: bool, side: Global.Side):
 	var terminal_instance: Terminal = terminal.instantiate()
+
 	terminal_instance.global_position = Helpers.get_position_on_building_grid(click_position)
-	terminal_instance.global_position.x = input_terminal_x_position if is_input else output_terminal_x_position
+	terminal_instance.side = side
+
+	match side:
+		Global.Side.LEFT:
+			terminal_instance.global_position.x = terminal_positions[Global.Side.LEFT]
+			if (not is_input): terminal_instance.flip()
+			left_terminals.append(terminal_instance)
+		Global.Side.RIGHT:
+			terminal_instance.global_position.x = terminal_positions[Global.Side.RIGHT]
+			if (not is_input): terminal_instance.flip()
+			right_terminals.append(terminal_instance)
+		Global.Side.TOP:
+			terminal_instance.rotation = 0.5 * PI
+			terminal_instance.global_position.y = terminal_positions[Global.Side.TOP]
+			if (not is_input): terminal_instance.flip()
+			top_terminals.append(terminal_instance)
+		Global.Side.BOTTOM:
+			terminal_instance.rotation = 0.5 * PI
+			terminal_instance.global_position.y = terminal_positions[Global.Side.BOTTOM]
+			if (not is_input): terminal_instance.flip()
+			bottom_terminals.append(terminal_instance)
+
 	terminal_instance.input_terminal = is_input
 	terminal_instance.allow_user_input = is_input
 	terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "blocks" else '0'

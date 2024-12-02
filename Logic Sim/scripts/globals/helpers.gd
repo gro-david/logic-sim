@@ -8,17 +8,7 @@ func merge_dicts_recursively(a: Dictionary, b: Dictionary) -> Dictionary:
 		a.merge(b)
 	return a
 
-# func dict_key_to_int_recursively(dict: Dictionary) -> Dictionary:
-# 	for key in dict.keys():
-# 		var int_key = int(key)
-# 		dict[int_key] = dict[key].duplicate(true)
-# 		if dict[int_key] is Dictionary: dict_key_to_int_recursively(dict[int_key])
-# 		dict.erase(key)
-# 	return dict
-
 func dict_key_to_int_recursively(dict: Dictionary) -> Dictionary:
-	var keys_to_change = []
-
 	# Collect keys that need to be changed to avoid modifying the dictionary while iterating
 	for key in dict.keys():
 		var new_key = int(key)
@@ -32,3 +22,11 @@ func dict_key_to_int_recursively(dict: Dictionary) -> Dictionary:
 
 func get_position_on_building_grid(position: Vector2) -> Vector2:
 	return round(position / Global.building_grid_size) * Global.building_grid_size
+
+func debug(node, line, msg):
+	print("[%s, %s@%s] %s" % [node, node.get_script().get_path(), line, msg])
+
+func terminal_sorting_helper_axis_x(a,b) -> bool:
+	return a.global_position.x < b.global_position.x
+func terminal_sorting_helper_axis_y(a,b) -> bool:
+	return a.global_position.y < b.global_position.y

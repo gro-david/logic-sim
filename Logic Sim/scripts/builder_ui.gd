@@ -71,7 +71,7 @@ func _on_name_text_changed(new_text:String) -> void:
 func _on_color_picker_color_changed(color:Color) -> void:
 	builder.built_block_color = color
 
-func edit_custom_block(block_path: String) -> void:
+func edit_custom_block(_block_path: String) -> void:
 	pass
 
 func delete_custom_block(block_path: String) -> void:
@@ -177,13 +177,36 @@ func load_custom_blocks():
 		custom_buttons_to_blocks[Global.block_path + '/' + file] = []
 
 
-func _on_input_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
+func _on_left_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
 	if not Global.edit_mode: return
+	if Global.cursor_in_element: return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true)
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.LEFT)
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.LEFT)
 
 
-func _on_output_terminal_place_region_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+func _on_bottom_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
 	if not Global.edit_mode: return
+	if Global.cursor_in_element: return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false)
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.BOTTOM)
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.BOTTOM)
+
+
+func _on_top_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
+	if not Global.edit_mode: return
+	if Global.cursor_in_element: return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.TOP)
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.TOP)
+
+func _on_right_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
+	if not Global.edit_mode: return
+	if Global.cursor_in_element: return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.RIGHT)
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.RIGHT)

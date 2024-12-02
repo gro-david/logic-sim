@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://tg0nsfsddbcf"]
+
+[ext_resource type="Script" path="res://scripts/mouse_guide.gd" id="1_1wwtm"]
+
+[node name="mouse_guide" type="Node2D"]
+script = ExtResource("1_1wwtm")
+
+[node name="horizontal" type="Line2D" parent="."]
+position = Vector2(960, 0)
+points = PackedVector2Array(-960, 0, 960, 0)
+width = 2.0
+default_color = Color(0.403922, 0.403922, 0.403922, 0.403922)
+
+[node name="vertical" type="Line2D" parent="."]
+position = Vector2(0, 600)
+points = PackedVector2Array(0, -600, 0, 600)
+width = 2.0
+default_color = Color(0.403922, 0.403922, 0.403922, 0.403922)

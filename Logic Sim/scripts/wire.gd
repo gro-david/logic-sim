@@ -37,6 +37,7 @@ var additional_points: Array[Vector2] = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_meta('type', 'wire')
+	Helpers.debug(self,88,"test")
 	state = Global.State.OFF
 	Global.edit_wires = true
 	Global.terminal_changed.connect(set_terminal.bind())
@@ -85,6 +86,7 @@ func set_terminal():
 	# depending on if the terminal allows input we either set the input or the output
 	if Global.terminal.input_terminal:
 		set_input_terminal()
+		Helpers.debug(self,88,"test")
 	else:
 		set_output_terminal()
 
@@ -112,10 +114,15 @@ func set_output_terminal():
 	if Global.terminal.input_terminal: return
 	# the two terminals cannot be the same one
 	if Global.terminal == input_terminal: return
+
 	# we do not want to allow a recursive connection
-	if input_terminal and input_terminal.parent_block and Global.terminal.parent_block == input_terminal.parent_block: return
+	# if input_terminal and input_terminal.parent_block and Global.terminal.parent_block == input_terminal.parent_block: return
+
 	# save the output terminal and disconnect the signal
 	output_terminal = Global.terminal
+
+	if is_instance_valid(output_terminal.connected_wire): output_terminal.connected_wire.queue_free()
+
 	output_terminal.connected_wire = self
 	end_placed = true
 	# we check if the other terminal is not null. if this is the case the wire has been finished so we disconnect the signal and exit edit mode

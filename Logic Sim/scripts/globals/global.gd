@@ -5,17 +5,16 @@ signal edit_wires_changed
 signal block_placed
 
 var building_grid_size: int = 28
-
 var block_path: String = 'user://blocks'
-
 var builder_ui: BuilderUI
-
 var cursor_on_ui: bool
-
 var cursor_in_element: bool
 
 # state of the terminals lamps and wires
 enum State {OFF, ON}
+
+# the side on which the terminal is
+enum Side {LEFT, RIGHT, TOP, BOTTOM}
 
 # when we wre editing the wires we do not want to toggle the terminals, but want to save their instance instead
 var edit_wires: bool = false:

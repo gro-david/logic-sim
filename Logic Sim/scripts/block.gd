@@ -35,7 +35,7 @@ func _ready():
 	set_meta('type', 'block')
 
 	var terminal_instance: Terminal = terminal_scene.instantiate()
-	terminal_height = terminal_instance.sprite.texture.get_height() * terminal_instance.scale.y
+	terminal_height = terminal_instance.terminal_height * terminal_instance.scale.y
 
 	var style_box: StyleBoxFlat = StyleBoxFlat.new()
 	style_box.bg_color = color
