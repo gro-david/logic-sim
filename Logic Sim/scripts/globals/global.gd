@@ -2,6 +2,8 @@ extends Node
 
 signal terminal_changed
 signal edit_wires_changed
+
+@warning_ignore("unused_signal")
 signal block_placed
 
 var building_grid_size: int = 28
