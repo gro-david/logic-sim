@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://da8mb1ryuusws"]
+[gd_scene load_steps=13 format=3 uid="uid://da8mb1ryuusws"]
 
 [ext_resource type="Script" path="res://scripts/builder_ui.gd" id="1_oe850"]
 [ext_resource type="PackedScene" uid="uid://bn8p75uugukkc" path="res://scenes/wire.tscn" id="2_a05ga"]
@@ -9,8 +9,17 @@
 [ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="7_hma36"]
 [ext_resource type="Script" path="res://scripts/mouse_in_ui_check.gd" id="7_unbpu"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b48h6"]
+size = Vector2(32, 1072)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rkxup"]
-size = Vector2(32, 1200)
+size = Vector2(32, 1072)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o0fqj"]
+size = Vector2(1856, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ofdqt"]
+size = Vector2(1856, 32)
 
 [node name="ui" type="CanvasLayer" node_paths=PackedStringArray("name_edit", "color_picker", "and_btn", "not_btn", "wire_btn", "save_btn", "clear_btn", "edit_btn")]
 script = ExtResource("1_oe850")
@@ -106,21 +115,37 @@ size_flags_horizontal = 3
 text = "Save"
 script = ExtResource("7_unbpu")
 
-[node name="input_terminal_place_area" type="Area2D" parent="." groups=["terminal_placement_area"]]
+[node name="left_terminal_place_area" type="Area2D" parent="." groups=["terminal_placement_area"]]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="input_terminal_place_area"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left_terminal_place_area"]
 position = Vector2(16, 600)
-shape = SubResource("RectangleShape2D_rkxup")
+shape = SubResource("RectangleShape2D_b48h6")
 debug_color = Color(0.563315, 0.558729, 1.92523e-07, 0.42)
 
-[node name="output_terminal_place_region" type="Area2D" parent="." groups=["terminal_placement_area"]]
+[node name="right_terminal_place_area" type="Area2D" parent="." groups=["terminal_placement_area"]]
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="output_terminal_place_region"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="right_terminal_place_area"]
 position = Vector2(1904, 600)
 shape = SubResource("RectangleShape2D_rkxup")
 debug_color = Color(0.563315, 0.558729, 1.92523e-07, 0.42)
 
+[node name="bottom_terminal_place_area" type="Area2D" parent="." groups=["terminal_placement_area"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="bottom_terminal_place_area"]
+position = Vector2(960, 1152)
+shape = SubResource("RectangleShape2D_o0fqj")
+debug_color = Color(0.564706, 0.556863, 0, 0.419608)
+
+[node name="top_terminal_place_area" type="Area2D" parent="." groups=["terminal_placement_area"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="top_terminal_place_area"]
+position = Vector2(960, 48)
+shape = SubResource("RectangleShape2D_ofdqt")
+debug_color = Color(0.564706, 0.556863, 0, 0.419608)
+
 [connection signal="color_changed" from="top_hud/color_picker" to="." method="_on_color_picker_color_changed"]
 [connection signal="text_changed" from="top_hud/name" to="." method="_on_name_text_changed"]
-[connection signal="input_event" from="input_terminal_place_area" to="." method="_on_input_terminal_place_area_input_event"]
-[connection signal="input_event" from="output_terminal_place_region" to="." method="_on_output_terminal_place_region_input_event"]
+[connection signal="input_event" from="left_terminal_place_area" to="." method="_on_left_terminal_place_area_input_event"]
+[connection signal="input_event" from="right_terminal_place_area" to="." method="_on_right_terminal_place_area_input_event"]
+[connection signal="input_event" from="bottom_terminal_place_area" to="." method="_on_bottom_terminal_place_area_input_event"]
+[connection signal="input_event" from="top_terminal_place_area" to="." method="_on_top_terminal_place_area_input_event"]
