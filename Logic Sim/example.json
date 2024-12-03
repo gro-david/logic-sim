@@ -3,7 +3,7 @@
 		"block_name": "",
 		"input_terminal_count": 0,
 		"output_terminal_count": 0,
-		"color": "#ffffff"
+		"color": "ffffff"
 	},
 	"blocks": [
 		{
@@ -13,10 +13,29 @@
 			"y_pos": 0
 		}
 	],
+	"terminals": {
+		"top": [
+			{
+				"id": "0",
+				"label": "Unnamed Terminal",
+				"color": "ffffff",
+				"is_input": true
+			},
+			{
+				"id": "1",
+				"label": "OUT A",
+				"color": "ffffff"
+			}
+		],
+		"bottom": [],
+		"left": [],
+		"right": []
+	},
 	"wires": [
 		{
 			"input_terminal": "block_0/terminal_1",
-			"output_terminal": "/terminal_2"
+			"output_terminal": "/terminal_2",
+			"additional_points": []
 		}
 	],
 	"boolean_expressions": [[], [], []],

@@ -2,10 +2,10 @@ extends Node2D
 class_name Block
 
 @export_category('Terminals')
-@export var incoming_count: int
-@export var outgoing_count: int
-@export var incoming: Array[Terminal]
-@export var outgoing: Array[Terminal]
+@export var input_terminal_count: int
+@export var output_terminal_count: int
+@export var input_terminals: Array[Terminal]
+@export var output_terminals: Array[Terminal]
 
 @export_category('Config')
 @export var color: Color
@@ -30,7 +30,7 @@ var placement_offset: Vector2 = Vector2.ZERO
 
 # instantiating the block and setting
 func _ready():
-	print(incoming_count)
+	print(input_terminal_count)
 
 	set_meta('type', 'block')
 
@@ -50,27 +50,27 @@ func _ready():
 
 	label_node.size = Vector2(block_width, block_height)
 
-	if block_height < incoming_count * terminal_height:
-		label_node.size.y = (incoming_count + 1) * Global.building_grid_size
-		block_height = (incoming_count + 1) * Global.building_grid_size
+	if block_height < input_terminal_count * terminal_height:
+		label_node.size.y = (input_terminal_count + 1) * Global.building_grid_size
+		block_height = (input_terminal_count + 1) * Global.building_grid_size
 
-	if block_height < outgoing_count * terminal_height:
-		label_node.size.y = (outgoing_count + 1) * Global.building_grid_size
-		block_height = (outgoing_count + 1) * Global.building_grid_size
+	if block_height < output_terminal_count * terminal_height:
+		label_node.size.y = (output_terminal_count + 1) * Global.building_grid_size
+		block_height = (output_terminal_count + 1) * Global.building_grid_size
 
 	$Area2D/CollisionShape2D.shape.size = Vector2(block_width, block_height)
 	$Area2D/CollisionShape2D.position += Vector2(block_width, block_height) / 2
 
-	if incoming_count % 2 == 0:
-		incoming = instantiate_terminal_even_count(incoming_count, -offset.x, false)
+	if input_terminal_count % 2 == 0:
+		input_terminals = instantiate_terminal_even_count(input_terminal_count, -offset.x, false)
 	else:
-		incoming = instantiate_terminal_odd_count(incoming_count, -offset.x, false)
-	if outgoing_count % 2 == 0:
-		outgoing = instantiate_terminal_even_count(outgoing_count, block_width + offset.x, true)
+		input_terminals = instantiate_terminal_odd_count(input_terminal_count, -offset.x, false)
+	if output_terminal_count % 2 == 0:
+		output_terminals = instantiate_terminal_even_count(output_terminal_count, block_width + offset.x, true)
 	else:
-		outgoing = instantiate_terminal_odd_count(outgoing_count, block_width + offset.x, true)
+		output_terminals = instantiate_terminal_odd_count(output_terminal_count, block_width + offset.x, true)
 
-	for terminal in incoming:
+	for terminal in input_terminals:
 		terminal.state_changed.connect(update_states.bind())
 
 	Global.edit_wires_changed.connect(update_states.bind())
@@ -118,6 +118,7 @@ func instantiate_single_terminal(terminal_position: Vector2, is_input: bool) -> 
 	terminal_instance.input_terminal = is_input
 	terminal_instance.allow_user_input = false
 	terminal_instance.parent_block = self
+	terminal_instance.mode = Global.Mode.BLOCK
 	terminal_instance.name = str(int(str(get_children()[-1].name)) + 1) if get_children()[-1].name != "label" else '0'
 	add_child(terminal_instance)
 	return terminal_instance
@@ -131,10 +132,10 @@ func _process(_delta):
 	# global_position = Helpers.get_position_on_building_grid(get_global_mouse_position()) + placement_offset
 	global_position = Helpers.get_position_on_building_grid(get_global_mouse_position()) + placement_offset - Vector2(block_width, block_height) / 2
 
-	for terminal in incoming:
+	for terminal in input_terminals:
 		if not terminal.connected_wire: continue
 		terminal.connected_wire.calculate_line_points()
-	for terminal in outgoing:
+	for terminal in output_terminals:
 		if not terminal.connected_wire: continue
 		terminal.connected_wire.calculate_line_points()
 

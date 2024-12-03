@@ -1,14 +1,14 @@
 extends Block
 class_name CustomBlock
 
-var boolean_expressions: Array
+var boolean_expressions: Dictionary
 var boolean_expression_variables: Array
 var block_data: Dictionary
 
 func _ready() -> void:
 	block_name = block_data['info']['block_name']
-	incoming_count = block_data['info']['input_terminal_count']
-	outgoing_count = block_data['info']['output_terminal_count']
+	input_terminal_count = block_data['info']['input_terminal_count']
+	output_terminal_count = block_data['info']['output_terminal_count']
 	label = block_data['info']['block_name'].replace('_', ' ')
 	color = Color.from_string(block_data['info']['color'], '#ffffff')
 	boolean_expressions = block_data['boolean_expressions']
@@ -21,23 +21,24 @@ func _ready() -> void:
 
 
 func update_states():
+	Helpers.debug(self, 24, output_terminals)
 	var incoming_as_bool: Array
 
-	for terminal in incoming:
+	for terminal in input_terminals:
 		incoming_as_bool.append(terminal.state == Global.State.ON)
 
-	for i in range(len(boolean_expressions)):
-		var expression = boolean_expressions[i]
-		var expr = Expression.new()
-		expr.parse(expression, boolean_expression_variables)
-		outgoing[i].state = Global.State.ON if expr.execute(incoming_as_bool) else Global.State.OFF
+	for terminal in output_terminals:
+		var terminal_id = terminal.id
+		var expression_statement = boolean_expressions[terminal_id]
+		var expression = Expression.new()
+
+		expression.parse(expression_statement, boolean_expression_variables)
+		terminal.state = Global.State.ON if expression.execute(incoming_as_bool) else Global.State.OFF
 
 func get_boolean_expression(input_terminal_expressions: Array[String]) -> Array[String]:
-	print(input_terminal_expressions)
-	print(boolean_expressions)
 	var boolean_expression_with_inputs = boolean_expressions.duplicate()
-	for i in range(len(boolean_expressions)):
-		for j in range(boolean_expressions.count('i')):
-			boolean_expression_with_inputs[i].replace('i' + str(j), input_terminal_expressions[j])
-
+	for boolean_expression in boolean_expressions:
+		for i in range(len(boolean_expression_variables)):
+			var boolean_expression_variable = boolean_expression_variables[i]
+			boolean_expression.replace(boolean_expression_variable, input_terminal_expressions[i])
 	return boolean_expression_with_inputs

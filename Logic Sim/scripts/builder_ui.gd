@@ -128,13 +128,19 @@ func _on_clear_confirmed():
 		wire.queue_free()
 	for block in builder.get_node('blocks').get_children():
 		block.queue_free()
-	for _terminal in builder.input_terminals:
-		_terminal.queue_free()
-	for _terminal in builder.output_terminals:
+	for _terminal in builder.all_terminals:
 		_terminal.queue_free()
 
+	builder.top_terminals.clear()
+	builder.bottom_terminals.clear()
+	builder.left_terminals.clear()
+	builder.right_terminals.clear()
+	builder.all_terminals.clear()
 	builder.input_terminals.clear()
 	builder.output_terminals.clear()
+
+	builder.terminal_id_counter = 0
+	builder.block_count = 0
 
 func edit_builder_layout() -> void:
 	Global.edit_mode = true

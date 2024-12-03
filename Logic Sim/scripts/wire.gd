@@ -37,7 +37,6 @@ var additional_points: Array[Vector2] = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_meta('type', 'wire')
-	Helpers.debug(self,88,"test")
 	state = Global.State.OFF
 	Global.edit_wires = true
 	Global.terminal_changed.connect(set_terminal.bind())
@@ -54,10 +53,11 @@ func _process(_delta):
 	else:
 		global_position = get_global_mouse_position()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	# get_viewport().set_input_as_handled()
 	if not start_placed and not end_placed or (start_placed and end_placed): return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Helpers.debug(self, 57, "Input registered.")
 		# actually we are appending the last two elements one more time, but after appending the second from the back the first one from the back becomes the second one
 		# line.points[-1] = Helpers.get_position_on_building_grid(line.points[-1])
 		# line.points[-2] = Helpers.get_position_on_building_grid(line.points[-2])
@@ -86,7 +86,6 @@ func set_terminal():
 	# depending on if the terminal allows input we either set the input or the output
 	if Global.terminal.input_terminal:
 		set_input_terminal()
-		Helpers.debug(self,88,"test")
 	else:
 		set_output_terminal()
 
