@@ -7,11 +7,12 @@
 
 [node name="block" instance=ExtResource("1_312ni")]
 script = ExtResource("2_20dip")
-incoming_count = 2
-outgoing_count = 1
-color = Color(0.392157, 0.901961, 0.266667, 1)
-label = "and"
+input_terminal_count = 2
+output_terminal_count = 1
+color = Color(0, 0.831373, 0, 1)
+label = "AND"
 block_name = "builtin_and"
+multi_placement_y_gap = 28.0
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 shape = SubResource("RectangleShape2D_ccjdq")

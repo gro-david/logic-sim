@@ -8,4 +8,9 @@ script = ExtResource("1_sa8wf")
 
 [node name="block" parent="." instance=ExtResource("2_wekam")]
 position = Vector2(840, 456)
-color = Color(0.497474, 0.497474, 0.497474, 1)
+input_terminal_count = 0
+output_terminal_count = 0
+color = Color(0, 0, 0, 1)
+label = ""
+block_name = ""
+terminal_scene = null

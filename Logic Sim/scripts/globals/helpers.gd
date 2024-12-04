@@ -26,6 +26,14 @@ func get_position_on_building_grid(position: Vector2) -> Vector2:
 func debug(node, line, msg):
 	print("[%s, %s@%s] %s" % [node, node.get_script().get_path(), line, msg])
 
+func remove_invalid_instances(array):
+	var i = 0
+	while i < len(array):
+		if not is_instance_valid(array[i]):
+			array.remove_at(i)
+		else:
+			i += 1
+
 func terminal_sorting_helper_axis_x(a,b) -> bool:
 	return a.global_position.x < b.global_position.x
 func terminal_sorting_helper_axis_y(a,b) -> bool:
