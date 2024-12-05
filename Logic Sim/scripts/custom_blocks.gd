@@ -67,7 +67,7 @@ func instantiate_left_terminals():
 		terminal_instance.id = terminal['id']
 		terminal_instance.input_terminal = terminal['is_input']
 		terminal_instance.label = terminal['label']
-		terminal_instance.position = Vector2((i + 0.5) * Global.building_grid_size, 0)
+		terminal_instance.position = Vector2(0, (i + 0.5) * Global.building_grid_size)
 		terminal_instance.side = Global.Side.LEFT
 		terminal_instance.mode = Global.Mode.BLOCK
 		terminal_instance.parent_block = self
@@ -113,6 +113,7 @@ func instantiate_bottom_terminals():
 		terminal_instance.label = terminal['label']
 		terminal_instance.position = Vector2((i + 0.5) * Global.building_grid_size, block_height)
 		terminal_instance.rotation = 0.5 * PI
+		terminal_instance.flip()
 		terminal_instance.side = Global.Side.BOTTOM
 		terminal_instance.mode = Global.Mode.BLOCK
 		terminal_instance.parent_block = self
@@ -123,7 +124,6 @@ func instantiate_bottom_terminals():
 			output_terminals.append(terminal_instance)
 
 		add_child(terminal_instance)
-
 
 func update_states() -> void:
 	var incoming_as_bool: Array
@@ -138,11 +138,3 @@ func update_states() -> void:
 
 		expression.parse(expression_statement, boolean_expression_variables)
 		terminal.state = Global.State.ON if expression.execute(incoming_as_bool) else Global.State.OFF
-
-func get_boolean_expression(input_terminal_expressions: Array[String]) -> Array[String]:
-	var boolean_expression_with_inputs = boolean_expressions.duplicate()
-	for boolean_expression in boolean_expressions:
-		for i in range(len(boolean_expression_variables)):
-			var boolean_expression_variable = boolean_expression_variables[i]
-			boolean_expression.replace(boolean_expression_variable, input_terminal_expressions[i])
-	return boolean_expression_with_inputs

@@ -66,6 +66,7 @@ func _ready() -> void:
 # place wires/change the state of the terminal
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if not event is InputEventMouseButton or not event.pressed or Input.is_action_pressed('ctrl'): return
+	get_viewport().set_input_as_handled()
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		# if we are editing the wires we will not change the state but save the current terminal to be able to reference it
 		if Global.edit_wires:
@@ -76,10 +77,10 @@ func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int
 	elif event.button_index == MOUSE_BUTTON_RIGHT and not Global.edit_mode:
 		add_child(popup_panel_scene.instantiate())
 
-		$PopupPanel.position = position
+		$PopupPanel.position = global_position
 		$PopupPanel/VBoxContainer/LineEdit.text = label
 		$PopupPanel/VBoxContainer/Button.pressed.connect(queue_free)
-		$PopupPanel.popup_hide.connect(func(): $PopupPanel.queue_free())
+		$PopupPanel.popup_hide.connect(func(): if mode == Global.Mode.BUILDER: $PopupPanel.queue_free())
 		$PopupPanel/VBoxContainer/LineEdit.text_submitted.connect(_on_line_edit_text_submitted.bind())
 		$PopupPanel/VBoxContainer/ColorPicker.color_changed.connect(_on_color_picker_color_changed.bind())
 

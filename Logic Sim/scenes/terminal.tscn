@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bi4bmujwt6xvu" path="res://scenes/terminal_popup_panel.tscn" id="2_00n37"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gb6es"]
-size = Vector2(64, 85.3333)
+size = Vector2(82, 68)
 
 [node name="terminal" type="Node2D" node_paths=PackedStringArray("sprite", "connection_node", "top_left_label_node", "bottom_right_label_node", "top_left_panel", "bottom_right_panel")]
 z_index = 1
@@ -19,10 +19,6 @@ top_left_label_node = NodePath("TopLeftPanelContainer/Label")
 bottom_right_label_node = NodePath("BottomRightPanelContainer/Label")
 top_left_panel = NodePath("TopLeftPanelContainer")
 bottom_right_panel = NodePath("BottomRightPanelContainer")
-input_terminal = null
-allow_user_input = null
-terminal_height = null
-output_terminal_offset = null
 popup_panel_scene = ExtResource("2_00n37")
 metadata/_edit_use_anchors_ = true
 
@@ -36,7 +32,7 @@ position = Vector2(16, 0)
 scale = Vector2(1.5, 1.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(1, 0.76)
+position = Vector2(-6.33333, 0)
 shape = SubResource("RectangleShape2D_gb6es")
 
 [node name="connection" type="Node2D" parent="."]
