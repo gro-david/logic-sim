@@ -8,6 +8,9 @@ This will be a logic simulation program in Godot 4 inspired by Sebastian Lague's
 - [ ] Input: I would like to have something where the user can input stuff on runtime. I will probably be a LineEdit which will take an input, and any time that goes from low to high it will output the next character in a binary format. If the last character has been reached it will just loop around. Another output will tell the number of characters. 
 - [ ] Persistent Terminal Groups: The way Sebastian implemented terminal groups is nice but it also means that if you then try to edit the chip the terminal groups will not be displayed any more. 
 
+## Name
+This project does not really have a name at this point in time. Got an idea? Open an issue!
+
 ## Roadmap
 - [x] Four sided Chips: Chips can now have input and output terminals on all sides.
 - [ ] Better identification system for blocks and wires
