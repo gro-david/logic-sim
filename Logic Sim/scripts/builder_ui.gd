@@ -128,13 +128,19 @@ func _on_clear_confirmed():
 		wire.queue_free()
 	for block in builder.get_node('blocks').get_children():
 		block.queue_free()
-	for _terminal in builder.input_terminals:
-		_terminal.queue_free()
-	for _terminal in builder.output_terminals:
+	for _terminal in builder.all_terminals:
 		_terminal.queue_free()
 
+	builder.top_terminals.clear()
+	builder.bottom_terminals.clear()
+	builder.left_terminals.clear()
+	builder.right_terminals.clear()
+	builder.all_terminals.clear()
 	builder.input_terminals.clear()
 	builder.output_terminals.clear()
+
+	builder.terminal_id_counter = 0
+	builder.block_count = 0
 
 func edit_builder_layout() -> void:
 	Global.edit_mode = true
@@ -184,8 +190,6 @@ func _on_left_terminal_place_area_input_event(_viewport:Node, event:InputEvent, 
 		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.LEFT)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.LEFT)
-
-
 func _on_bottom_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
 	if not Global.edit_mode: return
 	if Global.cursor_in_element: return
@@ -193,8 +197,6 @@ func _on_bottom_terminal_place_area_input_event(_viewport:Node, event:InputEvent
 		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.BOTTOM)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.BOTTOM)
-
-
 func _on_top_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
 	if not Global.edit_mode: return
 	if Global.cursor_in_element: return
@@ -202,7 +204,6 @@ func _on_top_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _
 		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), true, Global.Side.TOP)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		builder.instantiate_terminal(builder.input_terminal_scene, builder.get_global_mouse_position(), false, Global.Side.TOP)
-
 func _on_right_terminal_place_area_input_event(_viewport:Node, event:InputEvent, _shape_idx:int) -> void:
 	if not Global.edit_mode: return
 	if Global.cursor_in_element: return

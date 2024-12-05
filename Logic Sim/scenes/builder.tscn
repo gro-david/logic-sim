@@ -4,14 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://cllrt0r8uh583" path="res://scenes/terminal.tscn" id="2_h4gki"]
 [ext_resource type="PackedScene" uid="uid://cs2b2xlnuff1j" path="res://scenes/selection_area.tscn" id="4_ihmsd"]
 [ext_resource type="PackedScene" uid="uid://da8mb1ryuusws" path="res://scenes/builder_ui.tscn" id="4_op87a"]
-[ext_resource type="PackedScene" path="res://scenes/mouse_guide.tscn" id="5_di6dl"]
+[ext_resource type="PackedScene" uid="uid://tg0nsfsddbcf" path="res://scenes/mouse_guide.tscn" id="5_di6dl"]
 
 [node name="builder" type="Node2D" node_paths=PackedStringArray("blocks", "wires")]
 script = ExtResource("1_ah7ta")
 input_terminal_scene = ExtResource("2_h4gki")
 output_terminal_scene = ExtResource("2_h4gki")
-input_terminal_spacing = 4
-output_terminal_spacing = 4
 blocks = NodePath("blocks")
 wires = NodePath("wires")
 

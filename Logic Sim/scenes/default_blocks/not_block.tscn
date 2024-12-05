@@ -7,11 +7,12 @@
 
 [node name="block" instance=ExtResource("1_c6knl")]
 script = ExtResource("2_tewu6")
-incoming_count = 1
-outgoing_count = 1
-color = Color(1, 0.266667, 0.227451, 1)
-label = "not"
+input_terminal_count = 1
+output_terminal_count = 1
+color = Color(0.843137, 0, 0, 1)
+label = "NOT"
 block_name = "builtin_not"
+multi_placement_y_gap = 28.0
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 shape = SubResource("RectangleShape2D_xcmne")

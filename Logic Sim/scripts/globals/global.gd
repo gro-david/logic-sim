@@ -1,10 +1,9 @@
 extends Node
 
-signal terminal_changed
-signal edit_wires_changed
-
 @warning_ignore("unused_signal")
 signal block_placed
+signal terminal_changed
+signal edit_wires_changed
 
 var building_grid_size: int = 28
 var block_path: String = 'user://blocks'
@@ -17,6 +16,9 @@ enum State {OFF, ON}
 
 # the side on which the terminal is
 enum Side {LEFT, RIGHT, TOP, BOTTOM}
+
+# which mode is this terminal in, either in the builder or on a placed blocks
+enum Mode {BUILDER, BLOCK}
 
 # when we wre editing the wires we do not want to toggle the terminals, but want to save their instance instead
 var edit_wires: bool = false:
