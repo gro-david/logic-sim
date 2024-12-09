@@ -24,10 +24,8 @@ var all_terminals: Array[Terminal]
 # this counter is used for the id which means that it will never be decremented and the id of the terminal will just be the value of this counter
 # the only possible problem with this approach is if the user goes up to INTMAX with the number of terminals
 var terminal_id_counter: int
-
-# These will be replaced with id counters. The difference is that these can decrease the id counters cannot. Se above for explanation.
-var block_count: int = 0
-var wire_count: int = 0
+var block_id_counter: int = 0
+var wire_id_counter: int = 0
 
 # the name of the block we are building
 var built_block_name: String = 'Block Name'
@@ -104,7 +102,7 @@ func get_terminal_input(terminal: Terminal) -> String:
 	var root_block: Block = root_terminal.parent_block
 	if root_block == null:
 		return 'i' + str(wire.input_terminal.id)
-	
+
 	if root_block is not CustomBlock:
 		match root_block.block_name:
 			'builtin_and': return '(' + get_terminal_input(root_block.input_terminals[0]) + ' and ' + get_terminal_input(root_block.input_terminals[1]) + ')'
@@ -113,13 +111,12 @@ func get_terminal_input(terminal: Terminal) -> String:
 	root_block = root_block as CustomBlock
 	# fetch the expression for the root terminal. since this contains variables (i0, i1, etc.)
 	# the terminal inputs for these terminals of the block will need to be fetched, and inserted into the expression instead of the variables.
-	# we replace the i with r so that we do not replace stuff twice. (eg. (not (i0 and i1)) then we put two not gates before the inputs essentially creating an or gate. 
-	# the result without the r would be (not ((not (not i0)) and (not i0))) instead of (not((not i0) and not(i1))) 
+	# we replace the i with r so that we do not replace stuff twice. (eg. (not (i0 and i1)) then we put two not gates before the inputs essentially creating an or gate.
+	# the result without the r would be (not ((not (not i0)) and (not i0))) instead of (not((not i0) and not(i1)))
 	var terminal_expression_with_vars = root_block.boolean_expressions[str(root_terminal.id)].replace('i','r')
 	for root_block_input_terminal in root_block.input_terminals:
 		terminal_expression_with_vars = terminal_expression_with_vars.replace("r" + str(root_block_input_terminal.id), get_terminal_input(root_block_input_terminal))
 	return terminal_expression_with_vars
-
 
 # saves the current block that is being built to a json file. it uses the simulaten function that makes it simulate all the states which also get exporteds
 func save():
@@ -142,6 +139,8 @@ func save():
 		'block_name': built_block_name,
 		'color': built_block_color.to_html(false),
 		'terminal_id_counter': terminal_id_counter,
+		'block_id_counter': block_id_counter,
+		'wire_id_counter': wire_id_counter
 	}
 	data['blocks'] = []
 	data['wires'] = []
@@ -162,14 +161,16 @@ func save():
 		data['terminals']['right'].append(terminal_data)
 
 	for block in blocks.get_children():
-		var block_data: Dictionary = {'index': int(str(block.name)), 'name_id': block.block_name, 'x': block.global_position.x, 'y': block.global_position.y}
+		var block_data: Dictionary = {'id': block.id, 'name_id': block.block_name, 'x': block.global_position.x, 'y': block.global_position.y}
 		data['blocks'].append(block_data)
 
 	for wire in wires.get_children():
 		if not wire.input_terminal or not wire.output_terminal: continue
-		var input_terminal_path: String = 'block_' + wire.input_terminal.get_parent().name + '/terminal_' + wire.input_terminal.name
-		var output_terminal_path: String = 'block_' + wire.output_terminal.get_parent().name + '/terminal_' + wire.output_terminal.name
-		var wire_data: Dictionary = {'input_terminal':  input_terminal_path.replace('block_builder', ''), 'output_terminal': output_terminal_path.replace('block_builder', ''), 'additional_points': wire.additional_points}
+		var input_terminal_is_builder = wire.input_terminal.mode == Global.Mode.BUILDER
+		var output_terminal_is_builder = wire.output_terminal.mode == Global.Mode.BUILDER
+		var input_terminal_path: String = '/%s' % wire.input_terminal.id if input_terminal_is_builder else '/block-%s/%s' % [wire.input_terminal.parent_block.id, wire.input_terminal.id] 
+		var output_terminal_path: String = '/%s' % wire.output_terminal.id if output_terminal_is_builder else '/block-%s/%s' % [wire.output_terminal.parent_block.id, wire.output_terminal.id]  
+		var wire_data: Dictionary = {'id': wire.id, 'input_terminal':  input_terminal_path, 'output_terminal': output_terminal_path, 'additional_points': wire.additional_points}
 		data['wires'].append(wire_data)
 
 	var simulation_result: Dictionary = simulate()

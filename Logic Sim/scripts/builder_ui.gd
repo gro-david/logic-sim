@@ -50,20 +50,22 @@ func _ready():
 
 func instantiate_block(scene: PackedScene):
 	var instance = scene.instantiate()
-	instance.name = str(builder.block_count)
 	instance.build_mode = true
 
-	builder.block_count += 1
+	instance.name = str(builder.block_id_counter)
+	instance.id = builder.block_id_counter
+	builder.block_id_counter += 1
+	
 	builder.blocks.add_child(instance)
 
 	multi_placement_behavior(instance)
 
 func instantiate_wire():
 	var instance = wire_scene.instantiate()
-	instance.name = str(builder.wire_count)
-	builder.wire_count += 1
+	instance.name = str(builder.wire_id_counter)
+	instance.id = builder.wire_id_counter
+	builder.wire_id_counter += 1
 	builder.wires.add_child(instance)
-
 
 func _on_name_text_changed(new_text:String) -> void:
 	builder.built_block_name = new_text
@@ -94,12 +96,15 @@ func _on_delete_confirmed(block_path: String) -> void:
 func instantiate_custom_block(block_path: String):
 	var block_data = JSON.parse_string(FileAccess.open(block_path, FileAccess.READ).get_as_text())
 	var instance: CustomBlock = custom_block.instantiate()
-	instance.name = str(builder.block_count)
+
 	instance.build_mode = true
 	instance.block_data = block_data
 	custom_buttons_to_blocks[block_path].append(instance)
-
-	builder.block_count += 1
+	
+	instance.name = str(builder.block_id_counter)
+	instance.id = builder.block_id_counter
+	builder.block_id_counter += 1
+	
 	builder.blocks.add_child(instance)
 
 	multi_placement_behavior(instance)
@@ -138,9 +143,6 @@ func _on_clear_confirmed():
 	builder.all_terminals.clear()
 	builder.input_terminals.clear()
 	builder.output_terminals.clear()
-
-	builder.terminal_id_counter = 0
-	builder.block_count = 0
 
 func edit_builder_layout() -> void:
 	Global.edit_mode = true

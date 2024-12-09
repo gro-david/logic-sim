@@ -38,3 +38,10 @@ func terminal_sorting_helper_axis_x(a,b) -> bool:
 	return a.global_position.x < b.global_position.x
 func terminal_sorting_helper_axis_y(a,b) -> bool:
 	return a.global_position.y < b.global_position.y
+
+func make_array_unique(input: Array) -> Array:
+	var output: Array = []
+	for element in input:
+		if output.has(element): continue
+		output.append(element)
+	return output

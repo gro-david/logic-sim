@@ -34,6 +34,7 @@ var end_placed: bool = false:
 			calculate_line_points()
 
 var additional_points: Array[Vector2] = []
+var id: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -59,8 +60,6 @@ func _input(event: InputEvent) -> void:
 	if not start_placed and not end_placed or (start_placed and end_placed): return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		# actually we are appending the last two elements one more time, but after appending the second from the back the first one from the back becomes the second one
-		# line.points[-1] = Helpers.get_position_on_building_grid(line.points[-1])
-		# line.points[-2] = Helpers.get_position_on_building_grid(line.points[-2])
 		line.add_point(line.get_point_position(line.get_point_count() - 3))
 		line.add_point(line.get_point_position(line.get_point_count() - 3))
 		check_for_wire_completed.call_deferred()
@@ -77,8 +76,16 @@ func check_for_wire_completed():
 	line.remove_point(line.get_point_count() - 1)
 	calculate_line_points()
 	update_states()
-	Global.builder_ui.instantiate_wire()
 
+	# the additional points are required for saving the wire and then loading it. but the first and last ones do not need to be saved since they will get calculated
+	# based on the position of the terminals
+	for point in line.points:
+		additional_points.append(point)
+	additional_points.assign(Helpers.make_array_unique(additional_points))
+	additional_points.remove_at(0)
+	additional_points.remove_at(len(additional_points) - 1)
+
+	Global.builder_ui.instantiate_wire()
 
 func set_terminal():
 	# if the terminal is the same one as one of the other ones we just return.
@@ -141,7 +148,6 @@ func calculate_line_points():
 		else:
 			calculate_line_points_backend(output_terminal.connection_node.global_position, input_terminal.connection_node.global_position)
 		add_collision_shapes()
-
 
 func calculate_line_points_backend(start: Vector2, end: Vector2):
 	line.points[0] = start
