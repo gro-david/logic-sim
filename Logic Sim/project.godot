@@ -30,6 +30,10 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="ignore"
 display_server/driver.linuxbsd="wayland"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-vim/plugin.cfg", "res://addons/godot_vim/plugin.cfg")
+
 [global_group]
 
 wire_area=""

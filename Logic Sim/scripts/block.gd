@@ -1,3 +1,4 @@
+#TODO: The naming of input and output terminal has to be refined since it seems to be switched in some places
 extends Node2D
 class_name Block
 
@@ -23,8 +24,8 @@ class_name Block
 var terminal_height: float
 var block_height: float
 var block_width: float
-
 var placement_offset: Vector2 = Vector2.ZERO
+var id: int
 
 func setup_step_one() -> void:
 	set_meta('type', 'block')
